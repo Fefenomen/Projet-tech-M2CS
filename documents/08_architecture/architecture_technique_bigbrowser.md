@@ -123,38 +123,7 @@ Le cœur fonctionnel est distribué gratuitement sous licence open-source. L'arc
 
 L'architecture logicielle de BigBrowser suit le patron **N-tiers avec séparation stricte des couches** :
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                          COUCHE PRÉSENTATION                                │
-│                                                                             │
-│   ┌──────────────────────────────────────────────────────────────────────┐  │
-│   │                   Frontend Bootstrap (Nginx)                         │  │
-│   │   Dashboard · Carte réseau · Alertes · Rapports · Configuration      │  │
-│   └──────────────────────────────┬───────────────────────────────────────┘  │
-│                                  │ HTTP/JSON (REST API)                     │
-├──────────────────────────────────▼─────────────────────────────────────────┤
-│                           COUCHE APPLICATION                                │
-│                                                                             │
-│   ┌──────────────────────────────────────────────────────────────────────┐  │
-│   │                     Backend FastAPI                                  │  │
-│   │   Routers API · Services métier · Modèles Pydantic · Auth           │  │
-│   └──────────┬──────────────────────────────────────┬────────────────────┘  │
-│              │ SQLAlchemy ORM                        │ Celery task.delay()  │
-├──────────────▼──────────────────┐   ┌───────────────▼────────────────────┤  │
-│        COUCHE DONNÉES           │   │      COUCHE TRAITEMENT ASYNC        │  │
-│                                 │   │                                     │  │
-│  ┌──────────────────────────┐   │   │  ┌──────────────────────────────┐  │  │
-│  │       PostgreSQL          │   │   │  │    Workers Celery            │  │  │
-│  │  hosts · ports · alerts   │   │   │  │  scan · capture · détection  │  │  │
-│  │  scans · events · reports │   │   │  │  corrélation · export        │  │  │
-│  └──────────────────────────┘   │   │  └──────────────┬───────────────┘  │  │
-│                                 │   │                  │ broker            │  │
-│                                 │   │  ┌───────────────▼───────────────┐  │  │
-│                                 │   │  │          Redis                 │  │  │
-│                                 │   │  │  File de tâches · Cache       │  │  │
-│                                 │   │  └───────────────────────────────┘  │  │
-└─────────────────────────────────┴───┴─────────────────────────────────────┘
-```
+![Capture d'écran de mon projet](08_architecture/assets/schema_d'architecture.png)
 
 ---
 
