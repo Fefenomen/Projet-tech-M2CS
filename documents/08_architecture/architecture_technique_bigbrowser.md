@@ -681,113 +681,9 @@ Le MVP est considéré livrable quand un administrateur peut, sans ouvrir un ter
 
 ---
 
-## 19. Architecture Docker retenue pour la démonstration
+## 19. Pourquoi cette architecture est adaptée au sujet
 
-L'environnement de démonstration est défini dans un fichier `docker-compose.demo.yml` distinct du `docker-compose.yml` de production. Il ajoute les conteneurs de simulation (endpoints + attaquant) et préconfigure des données initiales.
-
-```yaml
-# docker-compose.demo.yml (simplifié)
-version: "3.9"
-
-networks:
-  bigbrowser_internal:
-    driver: bridge
-  bigbrowser_sim:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/24
-
-services:
-
-  # ── Services applicatifs ──────────────────────────────────
-  nginx:
-    image: nginx:1.25
-    ports: ["80:80"]
-    networks: [bigbrowser_internal]
-
-  backend:
-    build: ./backend
-    cap_add: [NET_RAW, NET_ADMIN]
-    networks: [bigbrowser_internal, bigbrowser_sim]
-    environment:
-      DATABASE_URL: postgresql://bigbrowser:secret@db:5432/bigbrowser
-      REDIS_URL: redis://redis:6379/0
-    depends_on: [db, redis]
-
-  worker:
-    build: ./backend
-    command: celery -A tasks.celery_app worker --loglevel=info
-    cap_add: [NET_RAW, NET_ADMIN]
-    networks: [bigbrowser_internal, bigbrowser_sim]
-    depends_on: [redis, db]
-
-  beat:
-    build: ./backend
-    command: celery -A tasks.celery_app beat --loglevel=info
-    networks: [bigbrowser_internal]
-    depends_on: [redis]
-
-  db:
-    image: postgres:15
-    environment:
-      POSTGRES_DB: bigbrowser
-      POSTGRES_USER: bigbrowser
-      POSTGRES_PASSWORD: secret
-    networks: [bigbrowser_internal]
-    volumes: [pgdata:/var/lib/postgresql/data]
-
-  redis:
-    image: redis:7
-    networks: [bigbrowser_internal]
-
-  # ── Simulation réseau ─────────────────────────────────────
-  endpoint_1:
-    image: ubuntu:22.04
-    command: >
-      sh -c "apt-get install -y openssh-server nginx &&
-             service ssh start && service nginx start && tail -f /dev/null"
-    networks:
-      bigbrowser_sim:
-        ipv4_address: 172.20.0.10
-
-  endpoint_2:
-    image: ubuntu:22.04
-    command: ["sh", "-c", "tail -f /dev/null"]
-    networks:
-      bigbrowser_sim:
-        ipv4_address: 172.20.0.11
-
-  endpoint_3:
-    image: python:3.11
-    command: ["sh", "-c", "python -m http.server 8080"]
-    networks:
-      bigbrowser_sim:
-        ipv4_address: 172.20.0.12
-
-  attaquant:
-    image: kalilinux/kali-rolling
-    command: ["sh", "-c", "tail -f /dev/null"]
-    networks:
-      bigbrowser_sim:
-        ipv4_address: 172.20.0.2
-    cap_add: [NET_RAW, NET_ADMIN]
-
-volumes:
-  pgdata:
-```
-
-**Démarrage en une commande :**
-```bash
-docker compose -f docker-compose.demo.yml up -d
-# Interface disponible sur http://localhost
-```
-
----
-
-## 20. Pourquoi cette architecture est adaptée au sujet
-
-### 20.1 Adéquation avec le périmètre fonctionnel
+### 19.1 Adéquation avec le périmètre fonctionnel
 
 Chaque choix technologique répond directement à une contrainte fonctionnelle du projet :
 
@@ -800,7 +696,7 @@ Chaque choix technologique répond directement à une contrainte fonctionnelle d
 | Simulation d'attaques pour la formation | Conteneur Attaquant (Kali) | Environnement isolé, reproductible, sans risque |
 | Zéro CLI pour l'utilisateur final | Bootstrap + API REST | Interface 100 % navigateur, architecture API-first |
 
-### 20.2 Alignement avec les contraintes NIS2
+### 19.2 Alignement avec les contraintes NIS2
 
 La directive NIS2 impose trois obligations techniques directement adressées par l'architecture :
 
@@ -808,7 +704,7 @@ La directive NIS2 impose trois obligations techniques directement adressées par
 - **Traçabilité des incidents** → PostgreSQL conserve l'historique horodaté de tous les événements, alertes et scans — immuable et exportable.
 - **Notification structurée** → Les exports JSON et CSV sont formatés pour être directement transmissibles à l'ANSSI ou à un prestataire d'audit.
 
-### 20.3 Viabilité open-source et contributive
+### 19.3 Viabilité open-source et contributive
 
 L'architecture est pensée pour **accueillir des contributeurs externes** avec un minimum de friction :
 
@@ -817,7 +713,7 @@ L'architecture est pensée pour **accueillir des contributeurs externes** avec u
 - Environnement de développement démarrable en une commande (`docker compose up`).
 - Séparation stricte des couches : un contributeur peut travailler sur les règles de détection sans toucher au frontend ni à la base de données.
 
-### 20.4 Évolutivité vers les modules premium (v2+)
+### 19.4 Évolutivité vers les modules premium (v2+)
 
 L'architecture v1 est conçue comme un **socle extensible** :
 
