@@ -123,7 +123,7 @@ Le cœur fonctionnel est distribué gratuitement sous licence open-source. L'arc
 
 L'architecture logicielle de BigBrowser suit le patron **N-tiers avec séparation stricte des couches** :
 
-![Capture d'écran de mon projet](08_architecture/assets/schema_d'architecture.png)
+![Capture d'écran de mon projet](assets/schema_d'architecture.png)
 
 ---
 
