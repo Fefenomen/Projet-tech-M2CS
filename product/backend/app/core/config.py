@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     API_PREFIX: str = "/api/v1"
 
     # Security
-    SECRET_KEY: str = "your-secret-key-here-change-me"
+    SECRET_KEY: str = "your-secret-key-here-change-me-change-me"  # Min 32 bytes for HS256
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 

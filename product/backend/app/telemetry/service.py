@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 
 from app.telemetry.schemas import HeartbeatRequest, HeartbeatResponse
@@ -11,7 +11,7 @@ async def process_heartbeat(data: HeartbeatRequest) -> HeartbeatResponse:
     heartbeat = {
         "id": str(len(heartbeats) + 1),
         "hostname": data.hostname,
-        "timestamp": data.timestamp or datetime.utcnow(),
+        "timestamp": data.timestamp or datetime.now(timezone.utc),
         "status": data.status,
         "version": data.version,
     }

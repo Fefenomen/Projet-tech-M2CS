@@ -38,7 +38,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> dict:
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    user = auth_service.get_user(token_data.username)
+    user = auth_service.get_user(token_data["username"])
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
