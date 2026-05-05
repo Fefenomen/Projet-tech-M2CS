@@ -71,6 +71,14 @@ Les attaques par ransomware restent le vecteur le plus fréquent, avec 144 compr
 | Cyberattaques réussies contre PME (2023) | 330 000+ | Diginamic 2025 |
 | Perte moyenne d'action après une attaque (grands comptes) | -19,5 % sur 1 an | CSB School 2025 |
 
+### 2.2 La menace cyber de nos jours  
+
+L'ampleur de la menace numérique n'a jamais été aussi élevée. Au-delà des chiffres de 2024, l'analyse en temps réel de mai 2026 révèle :
+*   **Intensité de la menace** : Un score record de **1 114,8** (niveau Élevé).
+*   **Analyse CVE 2026** : Sur 30 vulnérabilités récentes, 43% sont critiques ou hautes (ex: CVE-2026-42369 avec un score de 10.0/10).
+*   **Cibles majeures** : Les infrastructures Microsoft (370 vulnérabilités), Apple (93) et Cisco (89) restent les plus exploitées.
+*   **Ransomware** : 317 cas documentés en 2026, représentant 20% des vulnérabilités exploitées.
+
 ### 2.2 La maturité cyber des PME : un retard structurel
 
 Malgré une prise de conscience croissante, le tissu économique français reste très vulnérable. Le baromètre national 2025 de Cybermalveillance.gouv.fr dresse un tableau préoccupant :
@@ -266,6 +274,7 @@ NIS2 impose explicitement la "supervision de sécurité des systèmes d'informat
 
 La capacité de notre outil à générer des rapports exportables en JSON et CSV répond directement aux besoins de documentation et d'audit que NIS2 impose.
 
+
 ---
 
 ## 7. Analyse SWOT
@@ -316,7 +325,7 @@ Sur la base de l'analyse de marché, le positionnement optimal de la solution es
 | **P3 – Valeur ajoutée** | Détection de comportements suspects (règles) | Transforme l'outil en IDS léger, fort différenciateur |
 | **P3 – Valeur ajoutée** | Cartographie visuelle du réseau | Forte valeur pour la présentation et les audits |
 
-### 8.3 Pistes d'évolution post-v1
+### 8.3 Pistes d'évolution et Analyse PESTEL
 
 - Intégration avec Suricata pour la détection d'intrusion avancée via son API JSON
 - Module d'export vers des formats SIEM standard (CEF, LEEF) pour intégration dans les écosystèmes existants
@@ -324,7 +333,25 @@ Sur la base de l'analyse de marché, le positionnement optimal de la solution es
 - Scoring de risque par équipement basé sur les ports ouverts, services exposés et historique des alertes
 - API REST documentée pour intégration avec d'autres outils ou dashboards
 
-> 📝 **Note :** Un PESTEL est à ajouter dans cette section.
+L'évolution de la solution post-v1 s'appuiera sur les piliers technologiques (IA, scoring de risque) et réglementaires (Tableau de bord NIS2).
+
+#### Analyse PESTEL (Mai 2026)
+| Facteur | Impact sur le marché |
+| :--- | :--- |
+| **Politique** | Soutien via **France 2030 Cyber PME** (100 M€) pour la souveraineté numérique. |
+| **Économique** | Marché France estimé à **6,4 Md€** en 2025. Croissance du segment SIEM/SOC de **16%**. |
+| **Sociologique** | **76%** des organisations peinent à recruter des profils cyber. Besoin de solutions simples. |
+| **Technologique** | Menaces dopées à l'IA et score d'intensité de **1 114,8** rendant la détection continue vitale. |
+| **Environnemental** | Demande pour des solutions logicielles sobres (Green IT) réduisant le stockage de logs inutiles. |
+| **Légal** | Directives **NIS2 et DORA** imposant la supervision et des sanctions jusqu'à **2% du CA mondial**. |
+
+#### Modélisation du potentiel de marché (TAM / SAM / SOM)
+Pour valider notre stratégie, nous avons modélisé le potentiel économique selon une approche *bottom-up* :
+*   **TAM (Total Addressable Market)** : Marché mondial de la cybersécurité (> 250 Md$).
+*   **SAM (Serviceable Addressable Market)** : PME/ETI en France, Belgique et Suisse francophone concernées par NIS2, estimé à **195,2 M€**.
+*   **SOM (Serviceable Obtainable Market)** : Part réellement atteignable par DevinciWatch à 24-36 mois, estimée à **4,2 M€**.
+
+> 💡 **Stratégie d'entrée (Hybride) :** Conformément à notre analyse, nous privilégierons un modèle hybride équilibrant la vente directe (pour l'apprentissage client) et les partenariats MSSP/intégrateurs (pour la diffusion à grande échelle).
 
 ---
 
