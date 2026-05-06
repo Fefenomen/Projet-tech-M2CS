@@ -97,7 +97,9 @@ Le plan complet est disponible dans :
 | J3 | Instructions/readme.md mis à jour (BigBrowser) | Mai 2026 | ✅ Atteint |
 | J4 | OpenCode configuré, agents et skills créés | Mai 2026 | ✅ Atteint |
 | J5 | EPIC-01 planifié (US-01.1 à US-01.8) | Mai 2026 | ✅ Atteint |
-| J6 | US-01.3 Database Setup en cours | Mai 2026 | 🔄 En cours |
+| J6 | US-01.3 Database Setup 🔄 Débloqué manuellement | Mai 2026 | ✅ TERMINÉ |
+| J7 | US-01.4 Data Models | Mai 2026 | 🔄 En cours |
+| J8 | US-01.5 Auth Complète | Mai 2026 | ⏳ À faire |
 
 ---
 
