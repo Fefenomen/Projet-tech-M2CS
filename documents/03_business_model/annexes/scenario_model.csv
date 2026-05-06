@@ -1,0 +1,4 @@
+scenario,deployment_target,conversion_rate,ca_y1,unit
+Base case,500,3%,84000,€
+Optimistic,800,5%,140000,€
+Pessimistic,300,2%,50000,€

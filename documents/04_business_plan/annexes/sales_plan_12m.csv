@@ -1,0 +1,14 @@
+month,target_deployments,target_clients,target_audits,target_training,target_msp,notes
+1,40,0,0,0,0,Launch preparation
+2,40,0,0,0,0,GitHub publication
+3,45,0,0,0,0,First PME pilots
+4,45,0,0,0,0,Catalogue of services
+5,50,0,0,0,0,Website launch
+6,50,15,2,1,0,Release v1.0 GitHub
+7,55,15,2,1,0,FIC participation
+8,55,15,2,1,1,First MSP partner
+9,60,15,3,1,1,First contracts signed
+10,60,15,3,1,1,Assises de la Sécurité
+11,50,15,3,1,1,MSP certification program
+12,50,15,3,2,2,Review Year 1
+Total,550,15,18,9,2,

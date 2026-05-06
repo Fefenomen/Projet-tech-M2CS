@@ -1,0 +1,10 @@
+service,tier,price,unit,billing_cycle
+Support,Essential,280,€,monthly
+Support,Premium,500,€,monthly
+Support,Enterprise,Contact,€,custom
+Audit,NIS2 Basic,3000,€,per mission
+Audit,NIS2 Full,5000,€,per mission
+Training,Inter-company,2500,€,per group
+Training,On-site,5000,€,per day
+MSP,Partner license,400,€,monthly
+MSP,Certification,2000,€,one-time

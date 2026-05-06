@@ -1,0 +1,7 @@
+id,risk,probability,impact,criticality,mitigation,owner
+R1,Adoption open-source insufficient,High,High,16,Content strategy, FIC, ANSSI partnership,Marketing
+R2,Competition (Wazuh, PRTG),Medium,Medium,9,Differentiation UX, unified interface,Product
+R3,NIS2 transposition delay,Medium,Medium,9,Operational value independent of regulation,Product
+R4,Difficulty recruiting cyber,High,High,16,School partnerships, apprenticeships,HR
+R5,False positives harming credibility,Medium,Medium,9,QA investment, beta-test, feedback,QA
+R6,Market consolidation (Cisco-Splunk),Low,Low,4,Pricing positioning and open-source,Business Dev
