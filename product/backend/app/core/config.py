@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     SERVICE_VERSION: str = "0.1.0"
     API_PREFIX: str = "/api/v1"
 
+    # Database
+    DATABASE_URL: str = "sqlite:///./bigbrowser.db"
+
     # Security
     SECRET_KEY: str = "your-secret-key-here-change-me-change-me"  # Min 32 bytes for HS256
     ALGORITHM: str = "HS256"
