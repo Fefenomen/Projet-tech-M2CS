@@ -1,10 +1,10 @@
-# Utiliser OpenCode avec OpenAI pour développer DevinciWatch
+# Utiliser OpenCode avec OpenAI pour développer BigBrowser
 
 ## Objectif du guide
 
-Ce guide explique comment utiliser **OpenCode avec OpenAI** pour créer une équipe d’agents de développement autour du projet **DevinciWatch**.
+Ce guide explique comment utiliser **OpenCode avec OpenAI** pour créer une équipe d’agents de développement autour du projet **BigBrowser**.
 
-L’objectif n’est pas encore de créer des agents OpenAI dans le code Python de DevinciWatch.
+L’objectif n’est pas encore de créer des agents OpenAI dans le code Python de BigBrowser.
 
 L’objectif est :
 
@@ -21,7 +21,7 @@ OpenCode permet de configurer des agents spécialisés, avec des rôles, des per
 À la fin du guide, l’étudiant aura :
 
 ```text
-PROJET-M2-CYBER-2026/
+Projet-tech-M2CS/
 │
 ├── opencode.jsonc
 ├── AGENTS.md
@@ -123,8 +123,8 @@ OpenAI recommande de créer une clé API puis de l’utiliser via une variable d
 Dans un terminal :
 
 ```bash
-git clone https://github.com/yugmerabtene/PROJET-M2-CYBER-2026.git
-cd PROJET-M2-CYBER-2026
+git clone https://github.com/Fefenomen/Projet-tech-M2CS.git
+cd Projet-tech-M2CS
 ```
 
 Créer une branche de travail :
@@ -315,13 +315,13 @@ Mettre ce contenu :
   "agent": {
     "project-manager-tech": {
       "mode": "primary",
-      "description": "Chef de projet technique DevinciWatch : planification, backlog, priorités et coordination.",
+      "description": "Chef de projet technique BigBrowser : planification, backlog, priorités et coordination.",
       "prompt": "{file:.opencode/agents/project-manager-tech.md}"
     },
 
     "backend-python-dev": {
       "mode": "subagent",
-      "description": "Développeur backend Python/FastAPI pour DevinciWatch.",
+      "description": "Développeur backend Python/FastAPI pour BigBrowser.",
       "prompt": "{file:.opencode/agents/backend-python-dev.md}"
     },
 
@@ -413,11 +413,11 @@ touch AGENTS.md
 Mettre ce contenu :
 
 ```md
-# DevinciWatch - Règles OpenCode avec OpenAI
+# BigBrowser - Règles OpenCode avec OpenAI
 
 ## Objectif
 
-OpenCode utilise OpenAI comme moteur IA pour aider au développement du projet DevinciWatch.
+OpenCode utilise OpenAI comme moteur IA pour aider au développement du projet BigBrowser.
 
 Les agents définis dans ce dépôt servent uniquement à développer le projet.
 
@@ -470,12 +470,12 @@ Mettre ce contenu :
 
 ```md
 ---
-description: Chef de projet technique DevinciWatch.
+description: Chef de projet technique BigBrowser.
 mode: primary
 temperature: 0.2
 ---
 
-Tu es le chef de projet technique du projet DevinciWatch.
+Tu es le chef de projet technique du projet BigBrowser.
 
 Ta mission est de piloter le développement avec OpenCode.
 
@@ -508,7 +508,7 @@ Tu délègues :
 - à @devops-engineer pour Docker, scripts et CI/CD ;
 - à @security-tech-lead pour l’audit sécurité.
 
-Tu ne dois jamais demander la création complète de DevinciWatch en une seule fois.
+Tu ne dois jamais demander la création complète de BigBrowser en une seule fois.
 Tu dois travailler par petits incréments.
 ```
 
@@ -526,12 +526,12 @@ Mettre ce contenu :
 
 ```md
 ---
-description: Développeur backend Python/FastAPI pour DevinciWatch.
+description: Développeur backend Python/FastAPI pour BigBrowser.
 mode: subagent
 temperature: 0.1
 ---
 
-Tu es développeur backend Python senior sur DevinciWatch.
+Tu es développeur backend Python senior sur BigBrowser.
 
 Tu travailles principalement dans :
 
@@ -603,12 +603,12 @@ Mettre ce contenu :
 
 ```md
 ---
-description: Testeur QA DevinciWatch avec pytest.
+description: Testeur QA BigBrowser avec pytest.
 mode: subagent
 temperature: 0.1
 ---
 
-Tu es testeur QA sur DevinciWatch.
+Tu es testeur QA sur BigBrowser.
 
 Ta mission :
 
@@ -658,12 +658,12 @@ Mettre ce contenu :
 
 ```md
 ---
-description: DevOps DevinciWatch.
+description: DevOps BigBrowser.
 mode: subagent
 temperature: 0.1
 ---
 
-Tu es ingénieur DevOps sur DevinciWatch.
+Tu es ingénieur DevOps sur BigBrowser.
 
 Ta mission :
 
@@ -707,14 +707,14 @@ Mettre ce contenu :
 
 ```md
 ---
-description: Security Tech Lead DevinciWatch.
+description: Security Tech Lead BigBrowser.
 mode: subagent
 temperature: 0.1
 permission:
   edit: deny
 ---
 
-Tu es Security Tech Lead sur DevinciWatch.
+Tu es Security Tech Lead sur BigBrowser.
 
 Tu ne modifies pas le code directement.
 Tu audites et tu proposes des corrections.
@@ -753,7 +753,7 @@ Tu dois rendre :
 
 Les skills sont des instructions réutilisables. OpenCode les charge depuis des dossiers comme `.opencode/skills/<nom>/SKILL.md`. ([OpenCode][6])
 
-## 12.1 Skill DevinciWatch
+## 12.1 Skill BigBrowser
 
 Créer le fichier :
 
@@ -766,15 +766,15 @@ Mettre ce contenu :
 ```md
 ---
 name: devinciwatch-project
-description: Comprendre DevinciWatch, son MVP, ses epics, son architecture SOC et ses contraintes de lab.
+description: Comprendre BigBrowser, son MVP, ses epics, son architecture SOC et ses contraintes de lab.
 compatibility: opencode
 ---
 
-# Skill DevinciWatch Project
+# Skill BigBrowser Project
 
 ## Contexte
 
-DevinciWatch est une plateforme de cybersurveillance réseau orientée SOC.
+BigBrowser est une plateforme de cybersurveillance réseau orientée SOC.
 
 Le projet doit démontrer :
 
@@ -834,7 +834,7 @@ Mettre ce contenu :
 ````md
 ---
 name: fastapi-backend
-description: Construire le backend FastAPI DevinciWatch avec routes, schemas, services, tests et configuration.
+description: Construire le backend FastAPI BigBrowser avec routes, schemas, services, tests et configuration.
 compatibility: opencode
 ---
 
@@ -893,7 +893,7 @@ Mettre ce contenu :
 ```md
 ---
 name: python-testing
-description: Créer des tests pytest pour DevinciWatch : FastAPI, validation, sécurité, erreurs et recette.
+description: Créer des tests pytest pour BigBrowser : FastAPI, validation, sécurité, erreurs et recette.
 compatibility: opencode
 ---
 
@@ -938,7 +938,7 @@ Mettre ce contenu :
 ```md
 ---
 name: devops-docker
-description: Préparer Docker Compose, scripts, .env.example, CI/CD et lab reproductible pour DevinciWatch.
+description: Préparer Docker Compose, scripts, .env.example, CI/CD et lab reproductible pour BigBrowser.
 compatibility: opencode
 ---
 
@@ -946,7 +946,7 @@ compatibility: opencode
 
 ## Objectif
 
-Rendre DevinciWatch lançable localement.
+Rendre BigBrowser lançable localement.
 
 ## Lab cible
 
@@ -980,7 +980,7 @@ Mettre ce contenu :
 ````md
 ---
 name: cyber-security-review
-description: Auditer DevinciWatch : secrets, RBAC, auth agent, payloads, audit logs, Docker lab et scénarios cyber.
+description: Auditer BigBrowser : secrets, RBAC, auth agent, payloads, audit logs, Docker lab et scénarios cyber.
 compatibility: opencode
 ---
 
@@ -1029,7 +1029,7 @@ Mettre :
 
 ```md
 ---
-description: Analyse une epic DevinciWatch et prépare le plan de développement.
+description: Analyse une epic BigBrowser et prépare le plan de développement.
 agent: project-manager-tech
 ---
 
@@ -1064,7 +1064,7 @@ Mettre :
 
 ```md
 ---
-description: Implémente une tâche backend DevinciWatch.
+description: Implémente une tâche backend BigBrowser.
 agent: backend-python-dev
 ---
 
@@ -1097,7 +1097,7 @@ Mettre :
 
 ```md
 ---
-description: Crée ou met à jour les tests pour une fonctionnalité DevinciWatch.
+description: Crée ou met à jour les tests pour une fonctionnalité BigBrowser.
 agent: qa-tester
 ---
 
@@ -1130,7 +1130,7 @@ Mettre :
 
 ```md
 ---
-description: Audit sécurité DevinciWatch.
+description: Audit sécurité BigBrowser.
 agent: security-tech-lead
 ---
 
@@ -1172,7 +1172,7 @@ Mettre :
 
 ```md
 ---
-description: Prépare ou vérifie Docker pour DevinciWatch.
+description: Prépare ou vérifie Docker pour BigBrowser.
 agent: devops-engineer
 ---
 
@@ -1502,7 +1502,7 @@ Mets à jour le README backend avec les commandes de test et lancement.
 ## Mauvaise demande
 
 ```text
-Crée toute l’application DevinciWatch.
+Crée toute l’application BigBrowser.
 ```
 
 Pourquoi c’est mauvais :
@@ -1540,7 +1540,7 @@ OpenCode utilise OpenAI comme moteur IA.
 
 Les agents OpenCode servent à développer le projet.
 
-Les agents ne sont pas encore intégrés dans DevinciWatch.
+Les agents ne sont pas encore intégrés dans BigBrowser.
 
 On commence par créer une équipe de développement agentique :
 
@@ -1575,7 +1575,7 @@ Workflow final :
 La phrase clé :
 
 ```text
-Nous utilisons OpenCode avec OpenAI pour organiser, développer, tester et sécuriser DevinciWatch étape par étape.
+Nous utilisons OpenCode avec OpenAI pour organiser, développer, tester et sécuriser BigBrowser étape par étape.
 ```
 
 [1]: https://opencode.ai/docs/agents/?utm_source=chatgpt.com "Agents | OpenCode"
