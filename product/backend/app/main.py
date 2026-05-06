@@ -1,13 +1,24 @@
-from fastapi import FastAPI, Depends
+from contextlib import asynccontextmanager
+
+from fastapi import Depends, FastAPI
+
 from app.health.router import router as health_router
 from app.auth.router import router as auth_router, get_current_active_user
 from app.telemetry.router import router as telemetry_router
 from app.core.config import settings
+from app.core.database import initialize_database
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    initialize_database()
+    yield
 
 app = FastAPI(
     title="BigBrowser API",
     description="SOC Network Monitoring Platform",
     version="0.1.0",
+    lifespan=lifespan,
 )
 
 app.include_router(health_router, prefix="/health", tags=["health"])

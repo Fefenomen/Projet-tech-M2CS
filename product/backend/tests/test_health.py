@@ -1,10 +1,20 @@
 import pytest
 from fastapi.testclient import TestClient
+
+from app.health import router as health_router
 from app.main import app
+from app.telemetry import service as telemetry_service
 
 client = TestClient(app)
 
 SECRET_KEY = "your-secret-key-here-change-me"
+
+
+@pytest.fixture(autouse=True)
+def clear_heartbeats():
+    telemetry_service.heartbeats.clear()
+    yield
+    telemetry_service.heartbeats.clear()
 
 
 def get_token(username: str = "admin", password: str = "admin123") -> str:
@@ -22,8 +32,20 @@ def test_health_check():
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "ok"
+    assert data["database"] == "ok"
     assert "service" in data
     assert "version" in data
+
+
+def test_health_check_degraded_database(monkeypatch):
+    monkeypatch.setattr(health_router, "check_database_connection", lambda: False)
+
+    response = client.get("/health/")
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["status"] == "degraded"
+    assert data["database"] == "error"
 
 
 def test_root_endpoint():
