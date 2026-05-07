@@ -28,8 +28,8 @@ L'EPIC-01 couvre le développement du MVP BigBrowser, outil de cybersurveillance
 | Base de données | ✅ SQLite MVP | `app/core/database.py` |
 | Modèles de données | ✅ 6 modèles + relations | `app/models/` |
 | Seed users | ✅ admin + analyst | `app/core/database.py` |
-| Scan réseau | ❌ À implémenter | - |
-| Assets/Inventory | ❌ À implémenter | - |
+| Scan réseau | ✅ Socket scan + validation IP | `app/discovery/` |
+| Assets/Inventory | ✅ CRUD + ports | `app/assets/` |
 | Alertes | ❌ À implémenter | - |
 | Exports | ❌ À implémenter | - |
 | Audit logs | ❌ À implémenter | - |
@@ -135,35 +135,35 @@ L'EPIC-01 couvre le développement du MVP BigBrowser, outil de cybersurveillance
 
 ---
 
-### US-01.7 — Scan Réseau (Module Core)
+### US-01.7 — Scan Réseau (Module Core) ✅ DONE
 
 | Élément | Détail |
 |---------|--------|
 | **ID** | US-01.7 |
-| **Objectif** | Implémenter le scan de plage IP (nmap ou socket) pour découvrir les équipements |
+| **Objectif** | Implémenter le scan de plage IP (socket) pour découvrir les équipements |
 | **Epic** | EPIC-01 — Scan & Découverte |
-| **Fichiers** | `app/scan/router.py`, `app/scan/service.py`, `app/models/asset.py` |
+| **Fichiers** | `app/discovery/{router,schemas,service}.py` |
 | **Agent** | @backend-python-dev |
 | **Critères d'acceptation** | `POST /api/v1/scan` lance un scan, actifs créés en DB, plage IP validée |
 | **Tests attendus** | `test_scan_valid_range()`, `test_scan_invalid_ip_rejected()`, `test_scan_creates_assets()` |
 | **Risques** | R-T02 : Blocage par IDS (mitigation : délais configurable), R-S01 : Injection IP |
-| **Statut** | 📋 À faire |
+| **Statut** | ✅ TERMINÉ |
 
 ---
 
-### US-01.8 — Inventaire des Actifs et Ports
+### US-01.8 — Inventaire des Actifs et Ports ✅ DONE
 
 | Élément | Détail |
 |---------|--------|
 | **ID** | US-01.8 |
 | **Objectif** | Stocker et exposer les actifs découverts (IP, hostname, ports ouverts) |
 | **Epic** | EPIC-01 — Scan & Découverte |
-| **Fichiers** | `app/assets/router.py`, `app/models/asset.py`, `app/models/port.py` |
+| **Fichiers** | `app/assets/{router,schemas,service}.py` |
 | **Agent** | @backend-python-dev |
-| **Critères d'acceptation** | `GET /api/v1/assets` liste les actifs, `GET /api/v1/assets/{id}` donne le détail avec ports |
+| **Critères d'acceptation** | `GET /api/v1/assets/` liste les actifs, `GET /api/v1/assets/{id}` donne le détail avec ports |
 | **Tests attendus** | `test_list_assets()`, `test_asset_detail()`, `test_asset_not_found()` |
 | **Risques** | R-T03 : Latence UI si scan synchrones (mitigation : worker asynchrone) |
-| **Statut** | 📋 À faire |
+| **Statut** | ✅ TERMINÉ |
 
 ---
 
@@ -312,8 +312,10 @@ L'EPIC-01 couvre le développement du MVP BigBrowser, outil de cybersurveillance
 4. ✅ **US-01.4** — Modèles de données — **TERMINÉ**
 5. ✅ **US-01.5** — Auth JWT complète (DB) — **TERMINÉ**
 6. ✅ **US-01.6** — Init admin + POST /users — **TERMINÉ**
-7. 📋 **US-01.7** — Scan réseau — **À FAIRE (Sprint 3)**
-8. 📋 **US-01.8** — Inventaire actifs + ports — **À FAIRE (Sprint 3)**
+7. ✅ **US-01.7** — Scan réseau — **TERMINÉ**
+8. ✅ **US-01.8** — Inventaire actifs + ports — **TERMINÉ**
+9. 📋 **US-01.9** — Détection/Alertes — **À FAIRE (Sprint 4)**
+10. 📋 **US-01.10** — Cycle de vie alertes — **À FAIRE (Sprint 4)**
 
 ---
 

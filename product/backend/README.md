@@ -17,10 +17,18 @@ product/backend/
 │   │   ├── router.py           # Login, /me, /users, RBAC
 │   │   ├── schemas.py          # Pydantic schemas
 │   │   └── service.py          # JWT, bcrypt, DB queries
+│   ├── discovery/
+│   │   ├── router.py           # Scan réseau (POST /scan)
+│   │   ├── schemas.py          # IP validation, scan schemas
+│   │   └── service.py          # TCP socket port scanning
+│   ├── assets/
+│   │   ├── router.py           # CRUD actifs (GET /assets)
+│   │   ├── schemas.py          # Asset/Port response schemas
+│   │   └── service.py          # Asset DB queries
 │   ├── models/
 │   │   ├── user.py             # User (users table)
 │   │   ├── asset.py            # Asset (assets table)
-│   │   ├── port.py             # Port (ports table)
+│   │   ├── port.py             # Port (ports table, +service_name)
 │   │   ├── alert.py            # Alert (alerts table)
 │   │   ├── audit_log.py        # AuditLog (audit_logs table)
 │   │   └── export.py           # ExportRecord (exports table)
@@ -31,7 +39,8 @@ product/backend/
 ├── tests/
 │   ├── conftest.py             # Test DB setup
 │   ├── test_health.py          # Auth, health, telemetry tests
-│   └── test_database.py        # Model + DB tests
+│   ├── test_database.py        # Model + DB tests
+│   └── test_discovery.py       # Scan + assets tests
 ├── pyproject.toml              # Dependencies
 ├── .env.example                # Variables d'environnement
 └── README.md
@@ -47,7 +56,7 @@ product/backend/
 ```bash
 cd product/backend
 python -m venv .venv
-source .venv/bin/activate  # Sur Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
@@ -65,17 +74,20 @@ Le serveur démarre sur http://127.0.0.1:8000
 python -m pytest -v
 ```
 
-## Endpoints disponibles (Sprint 2)
+## Endpoints disponibles (Sprint 3)
 
 | Méthode | Endpoint | Usage | Accès |
 |---|---|---|---|
 | `GET` | `/` | Infos service | Public |
 | `GET` | `/health/` | Health check | Public |
 | `POST` | `/api/v1/auth/login` | Authentification | Public |
-| `GET` | `/api/v1/auth/me` | Infos utilisateur courant | Authentiﬁé |
+| `GET` | `/api/v1/auth/me` | Infos utilisateur courant | Authentifié |
 | `POST` | `/api/v1/auth/users` | Créer un utilisateur | `admin` uniquement |
-| `POST` | `/api/v1/telemetry/heartbeat` | Heartbeat endpoint | Authentiﬁé |
-| `GET` | `/api/v1/telemetry/heartbeats` | Liste heartbeats | Authentiﬁé |
+| `POST` | `/api/v1/telemetry/heartbeat` | Heartbeat endpoint | Authentifié |
+| `GET` | `/api/v1/telemetry/heartbeats` | Liste heartbeats | Authentifié |
+| `POST` | `/api/v1/scan/` | Lancer un scan réseau | `admin` uniquement |
+| `GET` | `/api/v1/assets/` | Liste des actifs | Authentifié |
+| `GET` | `/api/v1/assets/{id}` | Détail actif + ports | Authentifié |
 
 ## Comptes par défaut
 
@@ -99,8 +111,8 @@ python -m pytest -v
 | Sprint 1 | US-01.4 Data Models | ✅ |
 | Sprint 2 | US-01.5 Auth JWT (DB) | ✅ |
 | Sprint 2 | US-01.6 Init admin + /users | ✅ |
-| Sprint 3 | US-01.7 Scan réseau | ❌ |
-| Sprint 3 | US-01.8 Inventaire actifs | ❌ |
+| Sprint 3 | US-01.7 Scan réseau | ✅ |
+| Sprint 3 | US-01.8 Inventaire actifs | ✅ |
 | Sprint 4 | US-01.9 Détection/Alertes | ❌ |
 | Sprint 4 | US-01.10 Cycle de vie alertes | ❌ |
 | Sprint 5 | US-01.11 Exports CSV/JSON | ❌ |
