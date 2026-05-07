@@ -5,15 +5,20 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
+WORKDIR /
 
-COPY backend/pyproject.toml backend/README.md ./
-RUN pip install --no-cache-dir -e ".[dev]"
+# Install backend dependencies
+COPY backend/pyproject.toml backend/README.md /app/
+RUN pip install --no-cache-dir -e "/app/.[dev]"
 
-COPY backend/app/ ./app/
-COPY frontend/ ../frontend/
+# Copy application code
+COPY backend/app/ /app/app/
 
-RUN mkdir -p /app/data
+# Copy frontend (main.py resolves FRONTEND_DIR to /frontend)
+COPY frontend/ /frontend/
+
+# Data directory
+RUN mkdir -p /data
 
 EXPOSE 8000
 
@@ -22,6 +27,6 @@ ENV HOST=0.0.0.0
 ENV PORT=8000
 
 HEALTHCHECK --interval=10s --timeout=3s --retries=5 \
-  CMD curl -f http://localhost:8000/health/ || exit 1
+  CMD curl -sf http://localhost:8000/health/ || exit 1
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

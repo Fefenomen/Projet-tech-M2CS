@@ -114,6 +114,14 @@ cmd_demo() {
     info "Waiting for endpoints to register..."
     sleep 15
 
+    info "Seeding demo data..."
+    if [ -f "./seed-demo.sh" ]; then
+        chmod +x ./seed-demo.sh
+        ./seed-demo.sh "http://localhost:8000"
+    else
+        warn "seed-demo.sh not found, skipping seed."
+    fi
+
     info "Waiting for attacker scenarios..."
     sleep 30
 
@@ -131,6 +139,16 @@ cmd_demo() {
         info "=== RECENT ALERTS ==="
         curl -sf http://localhost:8000/api/v1/alerts/ \
             -H "Authorization: Bearer $TOKEN" | python3 -m json.tool
+        echo ""
+        info "=== NIS2 COMPLIANCE ==="
+        curl -sf http://localhost:8000/api/v1/compliance/nis2 \
+            -H "Authorization: Bearer $TOKEN" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+s = d['score']
+print(f\"  Score: {s['overall_score']}%\")
+print(f\"  Conform: {s['compliant_count']}/{s['total_requirements']}\")
+" 2>/dev/null || echo "  (not available)"
         echo ""
         info "=== AUDIT LOGS ==="
         curl -sf http://localhost:8000/api/v1/audit-logs/ \

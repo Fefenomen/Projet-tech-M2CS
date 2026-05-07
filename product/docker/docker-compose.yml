@@ -9,7 +9,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - soc-data:/app/data
+      - soc-data:/data
     environment:
       DATABASE_URL: sqlite:///data/bigbrowser.db
       HOST: 0.0.0.0

@@ -6,6 +6,7 @@ from app.models.audit_log import AuditLog
 from app.models.export import ExportRecord
 from app.models.port import Port
 from app.models.user import User
+from app.models.tenant import Tenant
 
 __all__ = [
     "Alert",
@@ -13,5 +14,6 @@ __all__ = [
     "AuditLog",
     "ExportRecord",
     "Port",
+    "Tenant",
     "User",
 ]
