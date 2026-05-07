@@ -20,7 +20,7 @@ class Base(DeclarativeBase):
 
 
 def initialize_database() -> None:
-    from app.models import alert, asset, audit_log, export, port, user  # noqa: F401
+    from app.models import alert, asset, audit_log, export, port, tenant, user  # noqa: F401
 
     Base.metadata.create_all(bind=engine)
 
