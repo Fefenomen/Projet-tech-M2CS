@@ -144,3 +144,64 @@ def test_reports_summary():
     assert "total_assets" in data
     assert "total_alerts" in data
     assert "total_events" in data
+
+
+# ============================================================
+# US-03.3: API v2 with pagination
+# ============================================================
+
+def test_api_v2_alerts_paginated():
+    r = client.get("/api/v2/alerts?page=1&page_size=10", headers=auth_header())
+    assert r.status_code == 200
+    data = r.json()
+    assert "items" in data
+    assert "total" in data
+    assert "page" in data
+    assert "page_size" in data
+    assert "total_pages" in data
+
+
+def test_api_v2_alerts_filter_by_status():
+    r = client.get("/api/v2/alerts?status=nouvelle", headers=auth_header())
+    assert r.status_code == 200
+    data = r.json()
+    for item in data["items"]:
+        assert item["status"] == "nouvelle"
+
+
+def test_api_v2_assets_paginated():
+    r = client.get("/api/v2/assets?page=1&page_size=5", headers=auth_header())
+    assert r.status_code == 200
+    data = r.json()
+    assert "items" in data
+    assert data["page"] == 1
+    assert data["page_size"] == 5
+
+
+def test_api_v2_events_paginated():
+    r = client.get("/api/v2/events?page=1&page_size=10", headers=auth_header())
+    assert r.status_code == 200
+    data = r.json()
+    assert "items" in data
+    assert "total" in data
+
+
+def test_api_v2_events_filter_by_severity():
+    r = client.get("/api/v2/events?severity=low", headers=auth_header())
+    assert r.status_code == 200
+    data = r.json()
+    for item in data["items"]:
+        assert item["severity"] == "low"
+
+
+def test_api_v2_audit_logs_paginated():
+    r = client.get("/api/v2/audit-logs?page=1&page_size=10", headers=auth_header())
+    assert r.status_code == 200
+    data = r.json()
+    assert "items" in data
+    assert "total" in data
+
+
+def test_api_v2_requires_auth():
+    r = client.get("/api/v2/alerts")
+    assert r.status_code == 401
