@@ -5,19 +5,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /
+WORKDIR /app
 
-# Install backend dependencies
-COPY backend/pyproject.toml backend/README.md /app/
-RUN pip install --no-cache-dir -e "/app/.[dev]"
+# Copy backend source and install dependencies
+# pyproject.toml has packages.find where=["app"], so we need the app/ dir present
+COPY backend/pyproject.toml backend/README.md ./
+COPY backend/app/ ./app/
 
-# Copy application code
-COPY backend/app/ /app/app/
+RUN pip install --no-cache-dir -e ".[dev]"
 
-# Copy frontend (main.py resolves FRONTEND_DIR to /frontend)
+# Copy frontend (main.py resolves FRONTEND_DIR relative to backend dir)
 COPY frontend/ /frontend/
 
-# Data directory
+# Data directory for SQLite (mounted volume)
 RUN mkdir -p /data
 
 EXPOSE 8000
