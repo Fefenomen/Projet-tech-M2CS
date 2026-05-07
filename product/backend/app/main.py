@@ -14,6 +14,7 @@ from app.alerts.router import router as alerts_router
 from app.reports.router import router as reports_router
 from app.audit.router import router as audit_router
 from app.dashboard.router import router as dashboard_router
+from app.traffic.router import router as traffic_router
 from app.core.config import settings
 from app.core.database import initialize_database
 
@@ -39,6 +40,7 @@ app.include_router(alerts_router, prefix=f"{settings.API_PREFIX}/alerts", tags=[
 app.include_router(dashboard_router, prefix=f"{settings.API_PREFIX}/dashboard", tags=["dashboard"])
 app.include_router(reports_router, prefix=f"{settings.API_PREFIX}/exports", tags=["reports"])
 app.include_router(audit_router, prefix=f"{settings.API_PREFIX}/audit-logs", tags=["audit"])
+app.include_router(traffic_router, prefix=f"{settings.API_PREFIX}/traffic", tags=["traffic"])
 
 FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "frontend")
 

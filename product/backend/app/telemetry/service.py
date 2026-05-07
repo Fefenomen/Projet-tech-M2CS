@@ -28,6 +28,9 @@ async def get_heartbeats() -> list[dict[str, Any]]:
 
 
 async def process_events(data: TelemetryEventsRequest) -> TelemetryEventsResponse:
+    from app.core.database import SessionLocal
+    from app.alerts.detection_rules import check_rules_and_create_alerts
+
     now = datetime.now(timezone.utc)
     processed = 0
     for event in data.events:
@@ -44,6 +47,30 @@ async def process_events(data: TelemetryEventsRequest) -> TelemetryEventsRespons
         }
         events_store.append(record)
         processed += 1
+
+    # Run detection rules on incoming events
+    with SessionLocal() as db:
+        alerts = check_rules_and_create_alerts(db, [
+            {
+                "event_type": e.event_type,
+                "source_ip": e.source_ip,
+                "message": e.message,
+                "severity": e.severity,
+            }
+            for e in data.events
+        ])
+        if alerts:
+            from app.models.audit_log import AuditLog
+            for a in alerts:
+                db.add(AuditLog(
+                    user_id=None,
+                    role="system",
+                    action="alert_auto_created",
+                    target_type="alert",
+                    result=f"alert_{a.id}",
+                ))
+            db.commit()
+
     return TelemetryEventsResponse(received=len(data.events), processed=processed)
 
 

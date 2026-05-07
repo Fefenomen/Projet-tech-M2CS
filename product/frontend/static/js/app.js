@@ -132,6 +132,7 @@ function navigateTo(page) {
         case "dashboard": loadDashboard(); break;
         case "assets": loadAssets(); break;
         case "alerts": loadAlerts(); break;
+        case "traffic": loadTraffic(); break;
         case "exports": break;
         case "audit": loadAuditLogs(); break;
     }
@@ -373,6 +374,31 @@ async function loadAuditLogs() {
         `).join("") || '<tr><td colspan="6" class="text-center text-muted">Aucun journal</td></tr>';
     } catch (err) {
         console.error("Audit logs load failed:", err);
+    }
+}
+
+async function loadTraffic() {
+    try {
+        const protocol = document.getElementById("traffic-protocol-filter").value;
+        let url = "/traffic/?limit=200";
+        if (protocol) url += `&protocol=${protocol}`;
+
+        const data = await apiCall(url);
+        const tbody = document.getElementById("traffic-body");
+        tbody.innerHTML = data.captures.map(c => `
+            <tr>
+                <td>${c.id}</td>
+                <td><code>${c.source_ip}</code></td>
+                <td><code>${c.target_ip}</code></td>
+                <td><span class="badge bg-info">${c.protocol.toUpperCase()}</span></td>
+                <td>${c.source_port}</td>
+                <td>${c.target_port}</td>
+                <td class="text-truncate" style="max-width:200px">${c.payload_summary || "-"}</td>
+                <td>${formatDate(c.timestamp)}</td>
+            </tr>
+        `).join("") || '<tr><td colspan="8" class="text-center text-muted">Aucun trafic captur&eacute;</td></tr>';
+    } catch (err) {
+        console.error("Traffic load failed:", err);
     }
 }
 
