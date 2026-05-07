@@ -28,7 +28,7 @@ def initialize_database() -> None:
 
 
 def _seed_default_users() -> None:
-    """Create admin and analyst accounts if they don't exist."""
+    """Create admin, analyst, and agent accounts if they don't exist."""
     from app.auth.service import get_password_hash, get_user_by_username
     from app.models.user import User
 
@@ -36,6 +36,7 @@ def _seed_default_users() -> None:
         defaults = [
             {"username": "admin", "password": "admin123", "role": "admin"},
             {"username": "analyst", "password": "analyst123", "role": "analyst"},
+            {"username": "agent", "password": "agent_secret_mvp", "role": "analyst"},
         ]
         for entry in defaults:
             if get_user_by_username(db, entry["username"]) is None:

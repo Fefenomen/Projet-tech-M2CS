@@ -29,6 +29,18 @@ product/backend/
 │   │   ├── router.py           # CRUD alertes + PATCH statut
 │   │   ├── schemas.py          # Alert schemas + validation
 │   │   └── service.py          # Alert DB queries + audit log
+│   ├── dashboard/
+│   │   ├── router.py           # Métriques agrégées (GET /dashboard)
+│   │   ├── schemas.py          # Dashboard response schemas
+│   │   └── service.py          # Metrics aggregation
+│   ├── reports/
+│   │   ├── router.py           # Exports CSV/JSON + download
+│   │   ├── schemas.py          # Export request/response schemas
+│   │   └── service.py          # CSV/JSON generation
+│   ├── audit/
+│   │   ├── router.py           # Audit logs (admin only)
+│   │   ├── schemas.py          # Audit log response schemas
+│   │   └── service.py          # Audit log queries
 │   ├── models/
 │   │   ├── user.py             # User (users table)
 │   │   ├── asset.py            # Asset (assets table)
@@ -79,17 +91,19 @@ Le serveur démarre sur http://127.0.0.1:8000
 python -m pytest -v
 ```
 
-## Endpoints disponibles (Sprint 4)
+## Endpoints disponibles
 
 | Méthode | Endpoint | Usage | Accès |
 |---|---|---|---|
-| `GET` | `/` | Infos service | Public |
+| `GET` | `/` | Frontend Bootstrap | Public |
 | `GET` | `/health/` | Health check | Public |
 | `POST` | `/api/v1/auth/login` | Authentification | Public |
 | `GET` | `/api/v1/auth/me` | Infos utilisateur courant | Authentifié |
 | `POST` | `/api/v1/auth/users` | Créer un utilisateur | `admin` uniquement |
 | `POST` | `/api/v1/telemetry/heartbeat` | Heartbeat endpoint | Authentifié |
 | `GET` | `/api/v1/telemetry/heartbeats` | Liste heartbeats | Authentifié |
+| `POST` | `/api/v1/telemetry/events` | Events agent | Authentifié |
+| `GET` | `/api/v1/telemetry/events` | Liste events | Authentifié |
 | `POST` | `/api/v1/scan/` | Lancer un scan réseau | `admin` uniquement |
 | `GET` | `/api/v1/assets/` | Liste des actifs | Authentifié |
 | `GET` | `/api/v1/assets/{id}` | Détail actif + ports | Authentifié |
@@ -97,6 +111,11 @@ python -m pytest -v
 | `GET` | `/api/v1/alerts/{id}` | Détail alerte | Authentifié |
 | `POST` | `/api/v1/alerts/` | Créer une alerte | Authentifié |
 | `PATCH` | `/api/v1/alerts/{id}` | Changer statut alerte | Authentifié |
+| `GET` | `/api/v1/dashboard/` | Métriques agrégées | Authentifié |
+| `POST` | `/api/v1/exports/` | Générer export CSV/JSON | Authentifié |
+| `GET` | `/api/v1/exports/{id}/download` | Télécharger export | Authentifié |
+| `GET` | `/api/v1/audit-logs/` | Journaux d'audit | `admin` uniquement |
+| `GET` | `/api/v1/audit-logs/{id}` | Détail journal | `admin` uniquement |
 
 ## Comptes par défaut
 
@@ -124,7 +143,13 @@ python -m pytest -v
 | Sprint 3 | US-01.8 Inventaire actifs | ✅ |
 | Sprint 4 | US-01.9 Détection/Alertes | ✅ |
 | Sprint 4 | US-01.10 Cycle de vie alertes | ✅ |
-| Sprint 5 | US-01.11 Exports CSV/JSON | ❌ |
-| Sprint 5 | US-01.12 Audit logs | ❌ |
-| Sprint 6 | US-01.13 Frontend | ❌ |
-| Sprint 6 | US-01.14 Traffic capture (P2) | ❌ |
+| Sprint 5 | US-01.11 Exports CSV/JSON | ✅ |
+| Sprint 5 | US-01.12 Audit logs | ✅ |
+| Sprint 6 | US-01.13 Dashboard API | ✅ |
+| Sprint 6 | US-01.14 Frontend Bootstrap | ✅ |
+| Sprint 7 | US-02.1 Docker SOC | ✅ |
+| Sprint 7 | US-02.2 Network BBrowser_net | ✅ |
+| Sprint 8 | US-02.3 Agent Endpoint | ✅ |
+| Sprint 8 | US-02.4 Endpoint Docker | ✅ |
+| Sprint 9 | US-02.5 Attaquant Docker | ✅ |
+| Sprint 9 | US-02.6 Script demo.sh | ✅ |

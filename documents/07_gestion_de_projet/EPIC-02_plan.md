@@ -30,7 +30,7 @@ L'EPIC-02 construit l'environnement de démonstration Docker décrit dans l'arch
 | **Fichiers** | `product/docker/Dockerfile.soc`, `docker-compose.yml` |
 | **Agent** | @devops-engineer |
 | **Critères d'acceptation** | `docker compose up` → API sur :8000, frontend servi, DB persistée |
-| **Statut** | 🔄 En cours |
+| **Statut** | ✅ TERMINÉ |
 
 ### US-02.2 — Réseau Docker BBrowser_net + configuration
 
@@ -41,7 +41,7 @@ L'EPIC-02 construit l'environnement de démonstration Docker décrit dans l'arch
 | **Fichiers** | `product/docker/docker-compose.yml` (section networks) |
 | **Agent** | @devops-engineer |
 | **Critères d'acceptation** | Ping entre conteneurs, pas d'accès externe inutile |
-| **Statut** | 🔄 En cours |
+| **Statut** | ✅ TERMINÉ |
 
 ### US-02.3 — Agent Endpoint : Heartbeat + events vers l'API
 
@@ -52,7 +52,7 @@ L'EPIC-02 construit l'environnement de démonstration Docker décrit dans l'arch
 | **Fichiers** | `product/agent/agent.py`, `product/agent/Dockerfile.endpoint` |
 | **Agent** | @backend-python-dev |
 | **Critères d'acceptation** | Heartbeat toutes les 30s, collecte logs, authentification API |
-| **Statut** | 📋 Backlog |
+| **Statut** | ✅ TERMINÉ |
 
 ### US-02.4 — Endpoint Docker : conteneur supervisé avec logs
 
@@ -63,7 +63,7 @@ L'EPIC-02 construit l'environnement de démonstration Docker décrit dans l'arch
 | **Fichiers** | `product/docker/Dockerfile.endpoint`, `product/agent/entrypoint.sh` |
 | **Agent** | @devops-engineer |
 | **Critères d'acceptation** | nginx accessible, agent heartbeat, détectable par scan |
-| **Statut** | 📋 Backlog |
+| **Statut** | ✅ TERMINÉ |
 
 ### US-02.5 — Attaquant Docker : scénarios de simulation
 
@@ -74,7 +74,7 @@ L'EPIC-02 construit l'environnement de démonstration Docker décrit dans l'arch
 | **Fichiers** | `product/attacker/scenarios.py`, `product/docker/Dockerfile.attacker` |
 | **Agent** | @devops-engineer |
 | **Critères d'acceptation** | Scan de ports, HTTP flood, failed logins — pas de code destructeur |
-| **Statut** | 📋 Backlog |
+| **Statut** | ✅ TERMINÉ |
 
 ### US-02.6 — Script demo.sh : orchestration en 1 commande
 
@@ -85,7 +85,7 @@ L'EPIC-02 construit l'environnement de démonstration Docker décrit dans l'arch
 | **Fichiers** | `product/docker/demo.sh` |
 | **Agent** | @devops-engineer |
 | **Critères d'acceptation** | `./demo.sh demo` lance tout, exécute le scénario, affiche les résultats |
-| **Statut** | 📋 Backlog |
+| **Statut** | ✅ TERMINÉ |
 
 ### US-02.7 — Documentation lab + guide de reproduction
 
@@ -93,10 +93,10 @@ L'EPIC-02 construit l'environnement de démonstration Docker décrit dans l'arch
 |---------|--------|
 | **ID** | US-02.7 |
 | **Objectif** | Documentation complète du lab pour reproduction |
-| **Fichiers** | `product/docker/README.md` |
+| **Fichiers** | `product/docker/README.md`, `product/README.md` |
 | **Agent** | @devops-engineer |
 | **Critères d'acceptation** | Un tiers peut reproduire la démo sans aide |
-| **Statut** | 📋 Backlog |
+| **Statut** | ✅ TERMINÉ |
 
 ---
 
@@ -113,13 +113,16 @@ L'EPIC-02 construit l'environnement de démonstration Docker décrit dans l'arch
 
 ## Prochaines Actions
 
-1. 🔄 **US-02.1** — Dockerfile SOC + docker-compose.yml — **EN COURS**
-2. 🔄 **US-02.2** — Réseau BBrowser_net — **EN COURS** (inclus dans docker-compose)
-3. 📋 **US-02.3** — Agent Endpoint — **À FAIRE (Sprint 8)**
-4. 📋 **US-02.4** — Endpoint Docker — **À FAIRE (Sprint 8)**
-5. 📋 **US-02.5** — Attaquant Docker — **À FAIRE (Sprint 9)**
-6. 📋 **US-02.6** — Script demo.sh — **À FAIRE (Sprint 9)**
-7. 📋 **US-02.7** — Documentation lab — **À FAIRE (Sprint 10)**
+1. ✅ **US-02.1** → **US-02.7** — EPIC-02 TERMINÉ — Lab Docker complet
+
+**MVP BigBrowser : 100% fonctionnel**
+- EPIC-01 : Backend + Frontend (14/14 US) ✅
+- EPIC-02 : Docker Lab (7/7 US) ✅
+- 73 tests passants
+- 21 endpoints API
+- Démo reproductible en 1 commande
+
+**Prochaines étapes : EPIC-03 (Trafic capture + détection automatique + Celery/Redis)**
 
 ---
 

@@ -13,7 +13,8 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [AGENT] %(levelname)
 logger = logging.getLogger("agent")
 
 SOC_URL = os.getenv("SOC_URL", "http://soc:8000")
-AGENT_SECRET = os.getenv("AGENT_SECRET", "endpoint_secret_key")
+AGENT_USERNAME = "agent"
+AGENT_PASSWORD = os.getenv("AGENT_SECRET", "agent_secret_mvp")
 ENDPOINT_NAME = os.getenv("ENDPOINT_NAME", socket.gethostname())
 HEARTBEAT_INTERVAL = int(os.getenv("HEARTBEAT_INTERVAL", "30"))
 
@@ -34,7 +35,7 @@ def register_agent() -> str | None:
     try:
         resp = requests.post(
             f"{SOC_URL}/api/v1/auth/login",
-            json={"username": "agent", "password": AGENT_SECRET},
+            json={"username": AGENT_USERNAME, "password": AGENT_PASSWORD},
             timeout=5,
         )
         if resp.status_code == 200:
