@@ -31,8 +31,8 @@ L'EPIC-01 couvre le développement du MVP BigBrowser, outil de cybersurveillance
 | Scan réseau | ✅ Socket scan + validation IP | `app/discovery/` |
 | Assets/Inventory | ✅ CRUD + ports | `app/assets/` |
 | Alertes | ✅ CRUD + cycle de vie | `app/alerts/` |
-| Exports | ❌ À implémenter | - |
-| Audit logs | 🔄 Partiel (alert actions) | `app/alerts/service.py` |
+| Exports | ✅ CSV/JSON + download | `app/reports/` |
+| Audit logs | ✅ Endpoint admin + auto-log | `app/audit/` |
 | Frontend | ❌ À créer | `product/frontend/` |
 
 ---
@@ -83,23 +83,151 @@ L'EPIC-01 couvre le développement du MVP BigBrowser, outil de cybersurveillance
 | **Critères d'acceptation** | SQLite créé au démarrage, tables initialisées, connexion vérifiable via `/health` |
 | **Tests attendus** | `test_db_connection()` — vérifie que la DB est accessible et les tables existent |
 | **Risques** | R1 : Permissions d'écriture sur le fichier SQLite |
-| **Statut** | 📋 À faire |
+| **Statut** | ✅ TERMINÉ |
 
 ---
 
-### US-01.4 — Modèles de Données MVP
+### US-01.4 — Modèles de Données MVP ✅ DONE
 
 | Élément | Détail |
 |---------|--------|
 | **ID** | US-01.4 |
-| **Objectif** | Créer les modèles SQLAlchemy : User, Asset, Port, Alert, AuditLog, Export |
-| **Epic** | EPIC-01 — Modèles de données |
-| **Fichiers** | `app/models/user.py`, `asset.py`, `port.py`, `alert.py`, `audit_log.py`, `export.py` |
-| **Agent** | @backend-python-dev |
-| **Critères d'acceptation** | Modèles correspondant au cahier des charges (section 13.1), relations définies |
-| **Tests attendus** | `test_models_creation()` — crée un objet de chaque type et vérifie les champs |
-| **Risques** | R1 : Migration de schéma si changement futur |
-| **Statut** | 📋 À faire |
+| **Objectif** | Définir les modèles de données SQLAlchemy pour les entités MVP
+| **Epic** | EPIC-01 — Infrastructure de base
+| **Fichiers** | `app/models/` (user, heartbeat, asset, port, alert, audit_log)
+| **Agent** | @backend-python-dev
+| **Critères d'acceptation** | 6+ modèles créés avec relations et contraintes
+| **Tests attendus** | `test_models_creation()` — tables créées et fonctionnelles
+| **Risques** | Aucun
+| **Statut** | ✅ TERMINÉ |
+
+---
+
+### US-01.5 — Authentification JWT avec Base de Données ✅ DONE
+
+| Élément | Détail |
+|---------|--------|
+| **ID** | US-01.5 |
+| **Objectif** | Implémenter l'authentification JWT via la base de données
+| **Epic** | EPIC-01 — Sécurité
+| **Fichiers** | `app/auth/`
+| **Agent** | @backend-python-dev
+| **Critères d'acceptation** | `POST /api/v1/auth/login` valide, tokens JWT fonctionnels
+| **Tests attendus** | `test_login_valid()`, `test_login_invalid_password()`
+| **Risques** | Aucun
+| **Statut** | ✅ TERMINÉ |
+
+---
+
+### US-01.6 — Gestion des Rôles (RBAC) ✅ DONE
+
+| Élément | Détail |
+|---------|--------|
+| **ID** | US-01.6 |
+| **Objectif** | Implémenter le contrôle d'accès basé sur les rôles (admin/analyst)
+| **Epic** | EPIC-01 — Sécurité
+| **Fichiers** | `app/auth/router.py`
+| **Agent** | @backend-python-dev
+| **Critères d'acceptation** | `require_role()` bloque analyste sur endpoints admin
+| **Tests attendus** | `test_create_user_as_analyst_forbidden()`
+| **Risques** | Aucun
+| **Statut** | ✅ TERMINÉ |
+
+---
+
+### US-01.7 — Scan Réseau Borné ✅ DONE
+
+| Élément | Détail |
+|---------|--------|
+| **ID** | US-01.7 |
+| **Objectif** | Scanner une plage IP configurée par l'administrateur
+| **Epic** | EPIC-01 — Discovery
+| **Fichiers** | `app/discovery/`
+| **Agent** | @backend-python-dev
+| **Critères d'acceptation** | `POST /api/v1/scan/` valide les IPs, limite /24, scan TCP
+| **Tests attendus** | `test_scan_single_ip_localhost()`, `test_scan_range_too_large()`
+| **Risques** | R1 : Injection de commandes via champs IP — mitigé par regex Pydantic
+| **Statut** | ✅ TERMINÉ |
+
+---
+
+### US-01.8 — Détection de Ports Ouverts ✅ DONE
+
+| Élément | Détail |
+|---------|--------|
+| **ID** | US-01.8 |
+| **Objectif** | Détecter les ports ouverts sur les équipements scannés
+| **Epic** | EPIC-01 — Discovery
+| **Fichiers** | `app/discovery/`
+| **Agent** | @backend-python-dev
+| **Critères d'acceptation** | Ports détectés et associés à l'actif dans la DB
+| **Tests attendus** | Couvert par les tests de scan
+| **Risques** | Aucun
+| **Statut** | ✅ TERMINÉ |
+
+---
+
+### US-01.9 — Inventaire d'Actifs ✅ DONE
+
+| Élément | Détail |
+|---------|--------|
+| **ID** | US-01.9 |
+| **Objectif** | Maintenir un inventaire d'actifs réseau consultable
+| **Epic** | EPIC-01 — Assets
+| **Fichiers** | `app/assets/`
+| **Agent** | @backend-python-dev
+| **Critères d'acceptation** | `GET /api/v1/assets/` retourne la liste des actifs découverts
+| **Tests attendus** | `test_list_assets_empty()`, `test_asset_detail_with_ports()`
+| **Risques** | Aucun
+| **Statut** | ✅ TERMINÉ |
+
+---
+
+### US-01.10 — Génération d'Alertes ✅ DONE
+
+| Élément | Détail |
+|---------|--------|
+| **ID** | US-01.10 |
+| **Objectif** | Créer des alertes à partir de comportements suspects détectés
+| **Epic** | EPIC-01 — Alerts
+| **Fichiers** | `app/alerts/`
+| **Agent** | @backend-python-dev
+| **Critères d'acceptation** | `POST /api/v1/alerts/` crée une alerte avec sévérité et statut
+| **Tests attendus** | `test_create_alert_valid()`, `test_create_alert_default_severity()`
+| **Risques** | Aucun
+| **Statut** | ✅ TERMINÉ |
+
+---
+
+### US-01.11 — Exports CSV et JSON ✅ DONE
+
+| Élément | Détail |
+|---------|--------|
+| **ID** | US-01.11 |
+| **Objectif** | Produire des exports CSV/JSON comme preuves de conformité NIS2
+| **Epic** | EPIC-01 — Reports
+| **Fichiers** | `app/reports/` (router, service, schemas)
+| **Agent** | @backend-python-dev
+| **Critères d'acceptation** | `POST /api/v1/exports/` génère CSV ou JSON pour alerts/assets/audit_logs, `GET /api/v1/exports/{id}/download` télécharge le fichier
+| **Tests attendus** | 14 tests dans `tests/test_reports.py` couvrant formats, scopes, validation, permissions
+| **Risques** | Aucun
+| **Statut** | ✅ TERMINÉ |
+
+---
+
+### US-01.12 — Audit Log (Journalisation) ✅ DONE
+
+| Élément | Détail |
+|---------|--------|
+| **ID** | US-01.12 |
+| **Objectif** | Journaliser les actions sensibles et exposer un endpoint admin
+| **Epic** | EPIC-01 — Audit
+| **Fichiers** | `app/audit/` (router, service, schemas), `app/models/audit_log.py`
+| **Agent** | @backend-python-dev
+| **Critères d'acceptation** | `GET /api/v1/audit-logs/` retourne tous les logs (admin only), chaque export/alerte génère une entrée d'audit automatiquement
+| **Tests attendus** | `test_list_audit_logs_as_admin()`, `test_list_audit_logs_as_analyst_forbidden()`, `test_audit_logs_populated_after_export()`
+| **Risques** | Aucun
+| **Statut** | ✅ TERMINÉ |
 
 ---
 
@@ -199,23 +327,23 @@ L'EPIC-01 couvre le développement du MVP BigBrowser, outil de cybersurveillance
 
 ---
 
-### US-01.11 — Exports CSV et JSON
+### US-01.11 — Exports CSV et JSON ✅ DONE
 
 | Élément | Détail |
 |---------|--------|
 | **ID** | US-01.11 |
 | **Objectif** | Générer des exports CSV/JSON des alertes et actifs (preuve NIS2) |
 | **Epic** | EPIC-01 — Reporting & Exports |
-| **Fichiers** | `app/exports/router.py`, `app/exports/service.py`, `app/models/export.py` |
+| **Fichiers** | `app/reports/router.py`, `app/reports/service.py`, `app/reports/schemas.py`, `app/models/export.py` |
 | **Agent** | @backend-python-dev |
-| **Critères d'acceptation** | `POST /api/v1/exports` génère un fichier, métadonnées conformes (section 13.2) |
+| **Critères d'acceptation** | `POST /api/v1/exports` génère un fichier, métadonnées conformes (section 13.2), `GET /api/v1/exports/{id}/download` télécharge |
 | **Tests attendus** | `test_export_csv()`, `test_export_json()`, `test_export_metadata()` |
 | **Risques** | R-S02 : Exposition de données (mitigation : contrôle d'accès) |
-| **Statut** | 📋 À faire |
+| **Statut** | ✅ TERMINÉ |
 
 ---
 
-### US-01.12 — Audit Log (Journalisation)
+### US-01.12 — Audit Log (Journalisation) ✅ DONE
 
 | Élément | Détail |
 |---------|--------|
@@ -224,10 +352,10 @@ L'EPIC-01 couvre le développement du MVP BigBrowser, outil de cybersurveillance
 | **Epic** | EPIC-01 — Audit & Conformité |
 | **Fichiers** | `app/audit/router.py`, `app/audit/service.py`, `app/models/audit_log.py` |
 | **Agent** | @backend-python-dev |
-| **Critères d'acceptation** | Chaque action sensible crée une entrée `audit_logs`, `GET /api/v1/audit-logs` (admin) |
+| **Critères d'acceptation** | Chaque action sensible crée une entrée `audit_logs`, `GET /api/v1/audit-logs` (admin only) |
 | **Tests attendus** | `test_audit_on_login()`, `test_audit_on_export()`, `test_audit_admin_only()` |
 | **Risques** | R-P03 : Défaut de preuve (mitigation : audit obligatoire, format défini) |
-| **Statut** | 📋 À faire |
+| **Statut** | ✅ TERMINÉ |
 
 ---
 
@@ -309,8 +437,10 @@ L'EPIC-01 couvre le développement du MVP BigBrowser, outil de cybersurveillance
 1. ✅ **US-01.1** → **US-01.8** — Infrastructure, Auth, Scan, Assets — **TERMINÉ**
 2. ✅ **US-01.9** — Détection/Alertes — **TERMINÉ**
 3. ✅ **US-01.10** — Cycle de vie alertes — **TERMINÉ**
-4. 📋 **US-01.11** — Exports CSV/JSON — **À FAIRE (Sprint 5)**
-5. 📋 **US-01.12** — Audit logs — **À FAIRE (Sprint 5)**
+4. ✅ **US-01.11** — Exports CSV/JSON — **TERMINÉ (Sprint 5)**
+5. ✅ **US-01.12** — Audit logs — **TERMINÉ (Sprint 5)**
+6. 📋 **US-01.13** — Frontend Dashboard — **À FAIRE (Sprint 6)**
+7. 📋 **US-01.14** — Traffic Capture (P2) — **À FAIRE (Sprint 6)**
 
 ---
 
