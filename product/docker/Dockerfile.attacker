@@ -1,0 +1,23 @@
+FROM python:3.13-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    iputils-ping \
+    nmap \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /attacker
+
+COPY attacker/requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY attacker/ ./
+
+RUN chmod +x entrypoint.sh
+
+ENV TARGET_SUBNET=172.20.0.0/24
+
+HEALTHCHECK --interval=10s --timeout=3s --retries=3 \
+  CMD python3 -c "import scenarios; print('scenarios loaded')" || exit 1
+
+ENTRYPOINT ["./entrypoint.sh"]

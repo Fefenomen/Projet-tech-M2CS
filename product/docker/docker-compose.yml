@@ -1,0 +1,93 @@
+services:
+  # === ZONE SOC ===
+  soc:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.soc
+    container_name: bigbrowser-soc
+    hostname: soc
+    ports:
+      - "8000:8000"
+    volumes:
+      - soc-data:/app/data
+    environment:
+      DATABASE_URL: sqlite:///data/bigbrowser.db
+      HOST: 0.0.0.0
+      PORT: 8000
+    networks:
+      bbrowser_net:
+        ipv4_address: 172.20.0.10
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  # === ZONE ENDPOINTS ===
+  endpoint1:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.endpoint
+    container_name: bigbrowser-endpoint1
+    hostname: endpoint1
+    environment:
+      SOC_URL: http://soc:8000
+      AGENT_SECRET: endpoint_secret_key_1
+      ENDPOINT_NAME: endpoint1
+    depends_on:
+      soc:
+        condition: service_healthy
+    networks:
+      bbrowser_net:
+        ipv4_address: 172.20.0.20
+    restart: unless-stopped
+
+  endpoint2:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.endpoint
+    container_name: bigbrowser-endpoint2
+    hostname: endpoint2
+    environment:
+      SOC_URL: http://soc:8000
+      AGENT_SECRET: endpoint_secret_key_2
+      ENDPOINT_NAME: endpoint2
+    depends_on:
+      soc:
+        condition: service_healthy
+    networks:
+      bbrowser_net:
+        ipv4_address: 172.20.0.21
+    restart: unless-stopped
+
+  # === ZONE ATTAQUANT ===
+  attacker:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.attacker
+    container_name: bigbrowser-attacker
+    hostname: attacker
+    environment:
+      TARGET_SUBNET: "172.20.0.20-172.20.0.21"
+      SCENARIO_DELAY: 30
+    depends_on:
+      endpoint1:
+        condition: service_started
+      endpoint2:
+        condition: service_started
+    networks:
+      bbrowser_net:
+        ipv4_address: 172.20.0.50
+    restart: "no"
+
+volumes:
+  soc-data:
+    driver: local
+
+networks:
+  bbrowser_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
