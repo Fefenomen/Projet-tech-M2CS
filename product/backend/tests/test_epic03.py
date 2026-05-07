@@ -268,3 +268,56 @@ def test_create_duplicate_tenant():
         headers=auth_header(),
     )
     assert r.status_code == 400
+
+
+# ============================================================
+# US-03.6: Internationalization (FR/EN)
+# ============================================================
+
+def test_i18n_supported_languages():
+    r = client.get("/api/i18n/supported")
+    assert r.status_code == 200
+    data = r.json()
+    assert "languages" in data
+    assert "fr" in data["languages"]
+    assert "en" in data["languages"]
+
+
+def test_i18n_get_french():
+    r = client.get("/api/i18n/fr")
+    assert r.status_code == 200
+    data = r.json()
+    assert "fr" in data
+    assert "dashboard" in data["fr"]
+    assert data["fr"]["dashboard"]["title"] == "Tableau de bord"
+
+
+def test_i18n_get_english():
+    r = client.get("/api/i18n/en")
+    assert r.status_code == 200
+    data = r.json()
+    assert "en" in data
+    assert data["en"]["dashboard"]["title"] == "Dashboard"
+
+
+def test_i18n_specific_key():
+    r = client.get("/api/i18n/fr/dashboard.title")
+    assert r.status_code == 200
+    data = r.json()
+    assert data["value"] == "Tableau de bord"
+
+
+def test_i18n_section_filter():
+    r = client.get("/api/i18n/fr?section=dashboard")
+    assert r.status_code == 200
+    data = r.json()
+    assert "fr" in data
+    assert "title" in data["fr"]
+    assert data["fr"]["title"] == "Tableau de bord"
+
+
+def test_i18n_fallback_to_french():
+    r = client.get("/api/i18n/de")
+    assert r.status_code == 200
+    data = r.json()
+    assert "fr" in data  # Falls back to French
