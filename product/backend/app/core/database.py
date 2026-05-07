@@ -20,10 +20,32 @@ class Base(DeclarativeBase):
 
 
 def initialize_database() -> None:
-    # Import models here so metadata is populated before create_all.
     from app.models import alert, asset, audit_log, export, port, user  # noqa: F401
 
     Base.metadata.create_all(bind=engine)
+
+    _seed_default_users()
+
+
+def _seed_default_users() -> None:
+    """Create admin and analyst accounts if they don't exist."""
+    from app.auth.service import get_password_hash, get_user_by_username
+    from app.models.user import User
+
+    with SessionLocal() as db:
+        defaults = [
+            {"username": "admin", "password": "admin123", "role": "admin"},
+            {"username": "analyst", "password": "analyst123", "role": "analyst"},
+        ]
+        for entry in defaults:
+            if get_user_by_username(db, entry["username"]) is None:
+                db.add(User(
+                    username=entry["username"],
+                    password_hash=get_password_hash(entry["password"]),
+                    role=entry["role"],
+                    is_active=True,
+                ))
+        db.commit()
 
 
 def check_database_connection() -> bool:

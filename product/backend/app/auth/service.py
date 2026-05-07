@@ -3,39 +3,29 @@ from typing import Any
 
 import jwt
 import bcrypt
+from sqlalchemy.orm import Session
 
 from app.core.config import settings
-
-# Fake user database for MVP (replace with real DB later)
-fake_users_db = {
-    "admin": {
-        "username": "admin",
-        "hashed_password": bcrypt.hashpw(b"admin123", bcrypt.gensalt()),
-        "role": "admin",
-        "is_active": True,
-    },
-    "analyst": {
-        "username": "analyst",
-        "hashed_password": bcrypt.hashpw(b"analyst123", bcrypt.gensalt()),
-        "role": "analyst",
-        "is_active": True,
-    },
-}
+from app.models.user import User
 
 
-def verify_password(plain_password: str, hashed_password: bytes) -> bool:
-    return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password)
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
 
 
-def get_user(username: str) -> dict | None:
-    return fake_users_db.get(username)
+def get_password_hash(password: str) -> str:
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
 
-def authenticate_user(username: str, password: str) -> dict | None:
-    user = get_user(username)
+def get_user_by_username(db: Session, username: str) -> User | None:
+    return db.query(User).filter(User.username == username).first()
+
+
+def authenticate_user(db: Session, username: str, password: str) -> User | None:
+    user = get_user_by_username(db, username)
     if not user:
         return None
-    if not verify_password(password, user["hashed_password"]):
+    if not verify_password(password, user.password_hash):
         return None
     return user
 
@@ -61,3 +51,16 @@ def decode_token(token: str) -> dict | None:
         return {"username": username, "role": role}
     except jwt.InvalidTokenError:
         return None
+
+
+def create_user(db: Session, username: str, password: str, role: str = "analyst") -> User:
+    user = User(
+        username=username,
+        password_hash=get_password_hash(password),
+        role=role,
+        is_active=True,
+    )
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
