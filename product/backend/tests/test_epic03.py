@@ -205,3 +205,66 @@ def test_api_v2_audit_logs_paginated():
 def test_api_v2_requires_auth():
     r = client.get("/api/v2/alerts")
     assert r.status_code == 401
+
+
+# ============================================================
+# US-03.4: Multi-tenant MSP
+# ============================================================
+
+def test_list_tenants_requires_admin():
+    # Analyst cannot list tenants
+    r = client.post(
+        "/api/v1/auth/login",
+        json={"username": "analyst", "password": "analyst123"},
+    )
+    if r.status_code == 200:
+        token = r.json()["access_token"]
+        r = client.get("/api/v1/tenants/", headers={"Authorization": f"Bearer {token}"})
+        assert r.status_code == 403
+
+
+def test_create_tenant():
+    r = client.post(
+        "/api/v1/tenants/",
+        json={"name": "msp-client-1", "description": "Test MSP client"},
+        headers=auth_header(),
+    )
+    assert r.status_code == 201
+    data = r.json()
+    assert data["name"] == "msp-client-1"
+    assert data["created_by"] == "admin"
+
+
+def test_list_tenants():
+    # First create a tenant, then list
+    r = client.post(
+        "/api/v1/tenants/",
+        json={"name": "list-test-tenant", "description": "For listing test"},
+        headers=auth_header(),
+    )
+    assert r.status_code == 201
+
+    r = client.get("/api/v1/tenants/", headers=auth_header())
+    assert r.status_code == 200
+    data = r.json()
+    assert "tenants" in data
+    assert "total" in data
+    assert data["total"] >= 1
+
+
+def test_create_duplicate_tenant():
+    # Create first
+    r = client.post(
+        "/api/v1/tenants/",
+        json={"name": "dup-tenant-test", "description": "First"},
+        headers=auth_header(),
+    )
+    assert r.status_code == 201
+
+    # Try duplicate
+    r = client.post(
+        "/api/v1/tenants/",
+        json={"name": "dup-tenant-test", "description": "Duplicate"},
+        headers=auth_header(),
+    )
+    assert r.status_code == 400

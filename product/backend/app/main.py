@@ -17,6 +17,7 @@ from app.dashboard.router import router as dashboard_router
 from app.traffic.router import router as traffic_router
 from app.compliance.router import router as compliance_router
 from app.api_v2.router import router as api_v2_router
+from app.multi_tenant.router import router as multi_tenant_router
 from app.core.config import settings
 from app.core.database import initialize_database
 
@@ -45,6 +46,7 @@ app.include_router(audit_router, prefix=f"{settings.API_PREFIX}/audit-logs", tag
 app.include_router(traffic_router, prefix=f"{settings.API_PREFIX}/traffic", tags=["traffic"])
 app.include_router(compliance_router, prefix=f"{settings.API_PREFIX}", tags=["compliance"])
 app.include_router(api_v2_router, prefix="/api/v2", tags=["API v2"])
+app.include_router(multi_tenant_router, prefix=settings.API_PREFIX, tags=["multi-tenant"])
 
 FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "frontend")
 
