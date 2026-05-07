@@ -1,0 +1,96 @@
+body {
+    background-color: #1a1d23;
+    color: #e0e0e0;
+}
+
+.card {
+    background-color: #212529;
+    border-color: #333;
+}
+
+.table-dark {
+    --bs-table-bg: #212529;
+    --bs-table-striped-bg: #2c3035;
+    --bs-table-hover-bg: #353a40;
+}
+
+.severity-critical {
+    color: #ff4444;
+    font-weight: bold;
+}
+
+.severity-high {
+    color: #ff8800;
+    font-weight: bold;
+}
+
+.severity-medium {
+    color: #ffcc00;
+}
+
+.severity-low {
+    color: #44cc44;
+}
+
+.status-nouvelle {
+    background-color: #0d6efd;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.8em;
+}
+
+.status-en-cours {
+    background-color: #ffc107;
+    color: #000;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.8em;
+}
+
+.status-cloturee {
+    background-color: #198754;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.8em;
+}
+
+.metric-card {
+    border-left: 4px solid #0d6efd;
+}
+
+.metric-card.alerts { border-left-color: #dc3545; }
+.metric-card.assets { border-left-color: #0dcaf0; }
+.metric-card.audit { border-left-color: #6f42c1; }
+.metric-card.exports { border-left-color: #198754; }
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.metric-label {
+    font-size: 0.85rem;
+    color: #adb5bd;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.nav-link.active {
+    color: #0d6efd !important;
+    border-bottom: 2px solid #0d6efd;
+}
+
+.nav-link:hover:not(.active) {
+    color: #adb5bd !important;
+}
+
+.page-content {
+    animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

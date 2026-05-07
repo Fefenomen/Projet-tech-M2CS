@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BigBrowser — SOC Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="d-flex align-items-center justify-content-center min-vh-100 bg-dark">
+            <div class="card shadow-lg" style="max-width: 420px; width: 100%;">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-shield-check text-primary" style="font-size: 3rem;"></i>
+                        <h2 class="mt-2 fw-bold">BigBrowser</h2>
+                        <p class="text-muted">SOC Dashboard — Connexion</p>
+                    </div>
+                    <form id="login-form">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Identifiant</label>
+                            <input type="text" class="form-control" id="username" required autocomplete="username">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Mot de passe</label>
+                            <input type="password" class="form-control" id="password" required autocomplete="current-password">
+                        </div>
+                        <div id="login-error" class="alert alert-danger d-none" role="alert"></div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Se connecter
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard (hidden until logged in) -->
+        <div id="dashboard-screen" class="d-none">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary">
+                <div class="container-fluid">
+                    <a class="navbar-brand fw-bold" href="#">
+                        <i class="bi bi-shield-check text-primary me-1"></i> BigBrowser
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-page="dashboard" href="#">
+                                    <i class="bi bi-speedometer2 me-1"></i> Tableau de bord
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-page="assets" href="#">
+                                    <i class="bi bi-pc-display me-1"></i> Actifs
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-page="alerts" href="#">
+                                    <i class="bi bi-exclamation-triangle me-1"></i> Alertes
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-page="exports" href="#">
+                                    <i class="bi bi-file-earmark-arrow-down me-1"></i> Exports
+                                </a>
+                            </li>
+                            <li class="nav-item nav-item-admin d-none">
+                                <a class="nav-link" data-page="audit" href="#">
+                                    <i class="bi bi-journal-text me-1"></i> Audit
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="d-flex align-items-center">
+                            <span class="text-light me-3" id="user-display"></span>
+                            <button class="btn btn-outline-light btn-sm" id="logout-btn">
+                                <i class="bi bi-box-arrow-right me-1"></i> D&eacute;connexion
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Pages -->
+            <div class="container-fluid py-4">
+                <!-- Dashboard Page -->
+                <div id="page-dashboard" class="page-content">
+                    <h3 class="mb-4"><i class="bi bi-speedometer2 me-2"></i>Tableau de bord</h3>
+                    <div class="row g-4 mb-4" id="metrics-cards"></div>
+                    <div class="card">
+                        <div class="card-header bg-dark text-white">
+                            <i class="bi bi-clock-history me-1"></i> Alertes r&eacute;centes
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-dark table-striped mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Titre</th>
+                                            <th>S&eacute;v&eacute;rit&eacute;</th>
+                                            <th>Statut</th>
+                                            <th>Source IP</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recent-alerts-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assets Page -->
+                <div id="page-assets" class="page-content d-none">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3><i class="bi bi-pc-display me-2"></i>Inventaire des actifs</h3>
+                        <button class="btn btn-primary btn-admin d-none" id="btn-scan">
+                            <i class="bi bi-search me-1"></i> Lancer un scan
+                        </button>
+                    </div>
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-dark table-striped mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Adresse IP</th>
+                                            <th>Hostname</th>
+                                            <th>Statut</th>
+                                            <th>Premi&egrave;re vue</th>
+                                            <th>Derni&egrave;re vue</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="assets-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alerts Page -->
+                <div id="page-alerts" class="page-content d-none">
+                    <h3 class="mb-4"><i class="bi bi-exclamation-triangle me-2"></i>Alertes</h3>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <select class="form-select" id="alert-status-filter">
+                                <option value="">Tous les statuts</option>
+                                <option value="nouvelle">Nouvelle</option>
+                                <option value="en cours">En cours</option>
+                                <option value="cloturee">Cl&ocirc;tur&eacute;e</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-dark table-striped mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Titre</th>
+                                            <th>S&eacute;v&eacute;rit&eacute;</th>
+                                            <th>Statut</th>
+                                            <th>Source IP</th>
+                                            <th>Description</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="alerts-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exports Page -->
+                <div id="page-exports" class="page-content d-none">
+                    <h3 class="mb-4"><i class="bi bi-file-earmark-arrow-down me-2"></i>Exports (Preuves NIS2)</h3>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <form id="export-form" class="row g-3 align-items-end">
+                                <div class="col-md-4">
+                                    <label for="export-format" class="form-label">Format</label>
+                                    <select class="form-select" id="export-format">
+                                        <option value="csv">CSV</option>
+                                        <option value="json">JSON</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="export-scope" class="form-label">Donn&eacute;es</label>
+                                    <select class="form-select" id="export-scope">
+                                        <option value="alerts">Alertes</option>
+                                        <option value="assets">Actifs</option>
+                                        <option value="audit_logs">Journaux d'audit</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-success w-100">
+                                        <i class="bi bi-download me-1"></i> G&eacute;n&eacute;rer l'export
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="export-result" class="d-none">
+                        <div class="alert alert-success">
+                            <i class="bi bi-check-circle me-1"></i> <span id="export-message"></span>
+                            <a href="#" id="export-download-link" class="alert-link ms-2">T&eacute;l&eacute;charger</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Audit Logs Page (admin only) -->
+                <div id="page-audit" class="page-content d-none">
+                    <h3 class="mb-4"><i class="bi bi-journal-text me-2"></i>Journaux d'audit</h3>
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-dark table-striped mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Action</th>
+                                            <th>Cible</th>
+                                            <th>R&eacute;sultat</th>
+                                            <th>Utilisateur</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="audit-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scan Modal -->
+    <div class="modal fade" id="scan-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title"><i class="bi bi-search me-1"></i> Scan r&eacute;seau</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="scan-form">
+                        <div class="mb-3">
+                            <label for="scan-ip-start" class="form-label">Plage IP (ex: 192.168.1.0/24)</label>
+                            <input type="text" class="form-control" id="scan-ip-start" value="127.0.0.1" required>
+                        </div>
+                        <div id="scan-error" class="alert alert-danger d-none"></div>
+                        <div id="scan-success" class="alert alert-success d-none"></div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-play-fill me-1"></i> Lancer le scan
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Detail Modal -->
+    <div class="modal fade" id="alert-detail-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title">D&eacute;tail de l'alerte</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="alert-detail-body"></div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-sm btn-warning" id="alert-action-progress">En cours</button>
+                    <button type="button" class="btn btn-sm btn-success" id="alert-action-close">Cl&ocirc;turer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

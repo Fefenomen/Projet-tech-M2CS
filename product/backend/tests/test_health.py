@@ -43,9 +43,7 @@ def test_health_check():
 def test_root_endpoint():
     response = client.get("/")
     assert response.status_code == 200
-    data = response.json()
-    assert data["status"] == "running"
-    assert "service" in data
+    assert "BigBrowser" in response.text
 
 
 # --- Auth login ---
