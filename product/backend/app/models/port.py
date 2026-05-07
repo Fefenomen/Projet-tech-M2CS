@@ -18,6 +18,7 @@ class Port(Base):
     port: Mapped[int] = mapped_column(Integer)
     protocol: Mapped[str] = mapped_column(String(10), default="tcp")
     state: Mapped[str] = mapped_column(String(20), default="open")
+    service_name: Mapped[str | None] = mapped_column(String(50), nullable=True)
     observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
     asset: Mapped["Asset"] = relationship(back_populates="ports")

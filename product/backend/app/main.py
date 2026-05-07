@@ -5,6 +5,8 @@ from fastapi import Depends, FastAPI
 from app.health.router import router as health_router
 from app.auth.router import router as auth_router, get_current_active_user
 from app.telemetry.router import router as telemetry_router
+from app.discovery.router import router as discovery_router
+from app.assets.router import router as assets_router
 from app.core.config import settings
 from app.core.database import initialize_database
 
@@ -24,6 +26,8 @@ app = FastAPI(
 app.include_router(health_router, prefix="/health", tags=["health"])
 app.include_router(auth_router, prefix=f"{settings.API_PREFIX}/auth", tags=["auth"])
 app.include_router(telemetry_router, prefix=f"{settings.API_PREFIX}/telemetry", tags=["telemetry"])
+app.include_router(discovery_router, prefix=f"{settings.API_PREFIX}/scan", tags=["discovery"])
+app.include_router(assets_router, prefix=f"{settings.API_PREFIX}/assets", tags=["assets"])
 
 
 @app.get("/")
