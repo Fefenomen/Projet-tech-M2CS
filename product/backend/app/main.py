@@ -7,6 +7,7 @@ from app.auth.router import router as auth_router, get_current_active_user
 from app.telemetry.router import router as telemetry_router
 from app.discovery.router import router as discovery_router
 from app.assets.router import router as assets_router
+from app.alerts.router import router as alerts_router
 from app.core.config import settings
 from app.core.database import initialize_database
 
@@ -28,6 +29,7 @@ app.include_router(auth_router, prefix=f"{settings.API_PREFIX}/auth", tags=["aut
 app.include_router(telemetry_router, prefix=f"{settings.API_PREFIX}/telemetry", tags=["telemetry"])
 app.include_router(discovery_router, prefix=f"{settings.API_PREFIX}/scan", tags=["discovery"])
 app.include_router(assets_router, prefix=f"{settings.API_PREFIX}/assets", tags=["assets"])
+app.include_router(alerts_router, prefix=f"{settings.API_PREFIX}/alerts", tags=["alerts"])
 
 
 @app.get("/")

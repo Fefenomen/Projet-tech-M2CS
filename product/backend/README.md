@@ -25,6 +25,10 @@ product/backend/
 │   │   ├── router.py           # CRUD actifs (GET /assets)
 │   │   ├── schemas.py          # Asset/Port response schemas
 │   │   └── service.py          # Asset DB queries
+│   ├── alerts/
+│   │   ├── router.py           # CRUD alertes + PATCH statut
+│   │   ├── schemas.py          # Alert schemas + validation
+│   │   └── service.py          # Alert DB queries + audit log
 │   ├── models/
 │   │   ├── user.py             # User (users table)
 │   │   ├── asset.py            # Asset (assets table)
@@ -40,7 +44,8 @@ product/backend/
 │   ├── conftest.py             # Test DB setup
 │   ├── test_health.py          # Auth, health, telemetry tests
 │   ├── test_database.py        # Model + DB tests
-│   └── test_discovery.py       # Scan + assets tests
+│   ├── test_discovery.py       # Scan + assets tests
+│   └── test_alerts.py          # Alert CRUD + lifecycle tests
 ├── pyproject.toml              # Dependencies
 ├── .env.example                # Variables d'environnement
 └── README.md
@@ -74,7 +79,7 @@ Le serveur démarre sur http://127.0.0.1:8000
 python -m pytest -v
 ```
 
-## Endpoints disponibles (Sprint 3)
+## Endpoints disponibles (Sprint 4)
 
 | Méthode | Endpoint | Usage | Accès |
 |---|---|---|---|
@@ -88,6 +93,10 @@ python -m pytest -v
 | `POST` | `/api/v1/scan/` | Lancer un scan réseau | `admin` uniquement |
 | `GET` | `/api/v1/assets/` | Liste des actifs | Authentifié |
 | `GET` | `/api/v1/assets/{id}` | Détail actif + ports | Authentifié |
+| `GET` | `/api/v1/alerts/` | Liste alertes + stats | Authentifié |
+| `GET` | `/api/v1/alerts/{id}` | Détail alerte | Authentifié |
+| `POST` | `/api/v1/alerts/` | Créer une alerte | Authentifié |
+| `PATCH` | `/api/v1/alerts/{id}` | Changer statut alerte | Authentifié |
 
 ## Comptes par défaut
 
@@ -113,8 +122,8 @@ python -m pytest -v
 | Sprint 2 | US-01.6 Init admin + /users | ✅ |
 | Sprint 3 | US-01.7 Scan réseau | ✅ |
 | Sprint 3 | US-01.8 Inventaire actifs | ✅ |
-| Sprint 4 | US-01.9 Détection/Alertes | ❌ |
-| Sprint 4 | US-01.10 Cycle de vie alertes | ❌ |
+| Sprint 4 | US-01.9 Détection/Alertes | ✅ |
+| Sprint 4 | US-01.10 Cycle de vie alertes | ✅ |
 | Sprint 5 | US-01.11 Exports CSV/JSON | ❌ |
 | Sprint 5 | US-01.12 Audit logs | ❌ |
 | Sprint 6 | US-01.13 Frontend | ❌ |

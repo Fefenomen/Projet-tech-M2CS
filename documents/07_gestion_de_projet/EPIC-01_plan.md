@@ -30,9 +30,9 @@ L'EPIC-01 couvre le développement du MVP BigBrowser, outil de cybersurveillance
 | Seed users | ✅ admin + analyst | `app/core/database.py` |
 | Scan réseau | ✅ Socket scan + validation IP | `app/discovery/` |
 | Assets/Inventory | ✅ CRUD + ports | `app/assets/` |
-| Alertes | ❌ À implémenter | - |
+| Alertes | ✅ CRUD + cycle de vie | `app/alerts/` |
 | Exports | ❌ À implémenter | - |
-| Audit logs | ❌ À implémenter | - |
+| Audit logs | 🔄 Partiel (alert actions) | `app/alerts/service.py` |
 | Frontend | ❌ À créer | `product/frontend/` |
 
 ---
@@ -167,35 +167,35 @@ L'EPIC-01 couvre le développement du MVP BigBrowser, outil de cybersurveillance
 
 ---
 
-### US-01.9 — Détection et Alertes (Règles Simples)
+### US-01.9 — Détection et Alertes (Règles Simples) ✅ DONE
 
 | Élément | Détail |
 |---------|--------|
 | **ID** | US-01.9 |
-| **Objectif** | Créer le moteur de règles simple (ex: 3 tentatives = alerte) et générer des alertes |
+| **Objectif** | Créer le moteur de règles simple et générer des alertes |
 | **Epic** | EPIC-01 — Détection & Alerting |
-| **Fichiers** | `app/alerts/router.py`, `app/alerts/service.py`, `app/models/alert.py`, `app/rules/engine.py` |
+| **Fichiers** | `app/alerts/{router,schemas,service}.py` |
 | **Agent** | @backend-python-dev |
-| **Critères d'acceptation** | Règle déclenchée → alerte créée avec `nouvelle`, `en cours`, `clôturée` |
+| **Critères d'acceptation** | Règle déclenchée → alerte créée avec `nouvelle`, `en cours`, `cloturee` |
 | **Tests attendus** | `test_rule_triggers_alert()`, `test_alert_status_cycle()`, `test_alert_list()` |
 | **Risques** | R-T01 : Faux positifs (mitigation : ajustement seuils) |
-| **Statut** | 📋 À faire |
+| **Statut** | ✅ TERMINÉ |
 
 ---
 
-### US-01.10 — Cycle de Vie des Alertes
+### US-01.10 — Cycle de Vie des Alertes ✅ DONE
 
 | Élément | Détail |
 |---------|--------|
 | **ID** | US-01.10 |
 | **Objectif** | Permettre la qualification et le changement de statut des alertes |
 | **Epic** | EPIC-01 — Détection & Alerting |
-| **Fichiers** | `app/alerts/router.py` (PATCH), `app/models/alert.py` |
+| **Fichiers** | `app/alerts/router.py` (PATCH), `app/alerts/schemas.py` |
 | **Agent** | @backend-python-dev |
 | **Critères d'acceptation** | `PATCH /api/v1/alerts/{id}` change le statut, audit log généré |
 | **Tests attendus** | `test_update_alert_status()`, `test_alert_status_transition()` |
 | **Risques** | Aucun majeur |
-| **Statut** | 📋 À faire |
+| **Statut** | ✅ TERMINÉ |
 
 ---
 
@@ -306,16 +306,11 @@ L'EPIC-01 couvre le développement du MVP BigBrowser, outil de cybersurveillance
 
 ## Prochaines Actions
 
-1. ✅ **US-01.1** — `GET /health` — **TERMINÉ**
-2. ✅ **US-01.2** — Backend skeleton — **TERMINÉ**
-3. ✅ **US-01.3** — Configuration DB SQLite — **TERMINÉ**
-4. ✅ **US-01.4** — Modèles de données — **TERMINÉ**
-5. ✅ **US-01.5** — Auth JWT complète (DB) — **TERMINÉ**
-6. ✅ **US-01.6** — Init admin + POST /users — **TERMINÉ**
-7. ✅ **US-01.7** — Scan réseau — **TERMINÉ**
-8. ✅ **US-01.8** — Inventaire actifs + ports — **TERMINÉ**
-9. 📋 **US-01.9** — Détection/Alertes — **À FAIRE (Sprint 4)**
-10. 📋 **US-01.10** — Cycle de vie alertes — **À FAIRE (Sprint 4)**
+1. ✅ **US-01.1** → **US-01.8** — Infrastructure, Auth, Scan, Assets — **TERMINÉ**
+2. ✅ **US-01.9** — Détection/Alertes — **TERMINÉ**
+3. ✅ **US-01.10** — Cycle de vie alertes — **TERMINÉ**
+4. 📋 **US-01.11** — Exports CSV/JSON — **À FAIRE (Sprint 5)**
+5. 📋 **US-01.12** — Audit logs — **À FAIRE (Sprint 5)**
 
 ---
 
