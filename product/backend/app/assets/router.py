@@ -5,6 +5,7 @@ from app.auth.router import get_current_active_user
 from app.assets.schemas import AssetResponse, AssetDetailResponse, AssetListResponse
 from app.assets import service as asset_service
 from app.core.database import get_db
+from app.risk_scoring.service import compute_asset_risk_score
 
 
 router = APIRouter()
@@ -63,3 +64,23 @@ async def get_asset(
         status=asset.status,
         ports=ports,
     )
+
+
+@router.get("/{asset_id}/risk-score")
+async def get_asset_risk_score(
+    asset_id: int,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_active_user),
+):
+    asset = asset_service.get_asset_by_id(db, asset_id)
+    if not asset:
+        raise HTTPException(status_code=404, detail="Asset not found")
+
+    score = compute_asset_risk_score(db, asset)
+    return {
+        "asset_id": asset.id,
+        "ip_address": asset.ip_address,
+        "risk_score": score["score"],
+        "risk_level": score["level"],
+        "factors": score["factors"],
+    }

@@ -130,6 +130,7 @@ function navigateTo(page) {
 
     switch (page) {
         case "dashboard": loadDashboard(); break;
+        case "compliance": loadCompliance(); break;
         case "assets": loadAssets(); break;
         case "alerts": loadAlerts(); break;
         case "traffic": loadTraffic(); break;
@@ -406,4 +407,41 @@ function formatDate(iso) {
     if (!iso) return "-";
     const d = new Date(iso);
     return d.toLocaleDateString("fr-FR") + " " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+}
+
+async function loadCompliance() {
+    try {
+        const data = await apiCall("/compliance/nis2");
+        const score = data.score;
+
+        document.getElementById("nis2-score").textContent = `${score.overall_score}%`;
+        document.getElementById("nis2-conform").textContent = score.compliant_count;
+        document.getElementById("nis2-partial").textContent = score.partial_count;
+        document.getElementById("nis2-nonconform").textContent = score.non_compliant_count;
+        document.getElementById("nis2-total").textContent = score.total_requirements;
+
+        const tbody = document.getElementById("nis2-requirements-body");
+        tbody.innerHTML = data.requirements.map(r => {
+            let badgeClass = "bg-danger";
+            let badgeText = "Non conforme";
+            if (r.status === "conforme") {
+                badgeClass = "bg-success";
+                badgeText = "Conforme";
+            } else if (r.status === "partiellement_conforme") {
+                badgeClass = "bg-warning text-dark";
+                badgeText = "Partiel";
+            }
+            return `
+                <tr>
+                    <td><code>${r.id}</code></td>
+                    <td><strong>${r.title}</strong><br><small class="text-muted">${r.description}</small></td>
+                    <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+                    <td>${r.evidence || "-"}</td>
+                    <td>${r.recommendation || '<span class="text-success"><i class="bi bi-check"></i></span>'}</td>
+                </tr>
+            `;
+        }).join("");
+    } catch (err) {
+        console.error("Compliance load failed:", err);
+    }
 }

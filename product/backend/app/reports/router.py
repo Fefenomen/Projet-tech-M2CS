@@ -7,6 +7,10 @@ from app.reports.schemas import ExportRequest, ExportResponse
 from app.reports import service as report_service
 from app.core.database import get_db
 from app.models.audit_log import AuditLog
+from app.models.alert import Alert
+from app.models.asset import Asset
+from app.telemetry.service import events_store
+from sqlalchemy import func
 
 
 router = APIRouter()
@@ -71,3 +75,26 @@ async def download_export(
         filename=os.path.basename(record.file_path),
         media_type=media_type,
     )
+
+
+@router.get("/summary")
+async def get_reports_summary(
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_active_user),
+):
+    """Get KPI summary for reports dashboard."""
+    total_assets = db.query(func.count(Asset.id)).scalar() or 0
+    total_alerts = db.query(func.count(Alert.id)).scalar() or 0
+    total_events = len(events_store)
+    critical_alerts = db.query(func.count(Alert.id)).filter(Alert.severity == "critical").scalar() or 0
+    high_alerts = db.query(func.count(Alert.id)).filter(Alert.severity == "high").scalar() or 0
+    open_alerts = db.query(func.count(Alert.id)).filter(Alert.status == "new").scalar() or 0
+
+    return {
+        "total_assets": total_assets,
+        "total_alerts": total_alerts,
+        "total_events": total_events,
+        "critical_alerts": critical_alerts,
+        "high_alerts": high_alerts,
+        "open_alerts": open_alerts,
+    }
