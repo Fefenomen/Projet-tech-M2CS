@@ -1,26 +1,65 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+
 from app.core.config import settings
 
-# Create SQLite engine
-engine = create_engine(
-    settings.DATABASE_URL,
-    connect_args={"check_same_thread": False}
-)
 
-# Create sessionmaker
+def _engine_kwargs() -> dict:
+    if settings.DATABASE_URL.startswith("sqlite"):
+        return {"connect_args": {"check_same_thread": False}}
+    return {}
+
+
+engine = create_engine(settings.DATABASE_URL, **_engine_kwargs())
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Create declarative base for models
-Base = declarative_base()
+
+class Base(DeclarativeBase):
+    pass
+
+
+def initialize_database() -> None:
+    from app.models import alert, asset, audit_log, export, port, user  # noqa: F401
+
+    Base.metadata.create_all(bind=engine)
+
+    _seed_default_users()
+
+
+def _seed_default_users() -> None:
+    """Create admin, analyst, and agent accounts if they don't exist."""
+    from app.auth.service import get_password_hash, get_user_by_username
+    from app.models.user import User
+
+    with SessionLocal() as db:
+        defaults = [
+            {"username": "admin", "password": "admin123", "role": "admin"},
+            {"username": "analyst", "password": "analyst123", "role": "analyst"},
+            {"username": "agent", "password": "agent_secret_mvp", "role": "analyst"},
+        ]
+        for entry in defaults:
+            if get_user_by_username(db, entry["username"]) is None:
+                db.add(User(
+                    username=entry["username"],
+                    password_hash=get_password_hash(entry["password"]),
+                    role=entry["role"],
+                    is_active=True,
+                ))
+        db.commit()
+
+
+def check_database_connection() -> bool:
+    try:
+        with engine.connect() as connection:
+            connection.execute(text("SELECT 1"))
+        return True
+    except Exception:
+        return False
 
 
 def get_db() -> Session:
-    """
-    Dependency to get DB session.
-    Use as: db: Session = Depends(get_db)
-    """
+    """Yield a SQLAlchemy session for request-scoped dependencies."""
     db = SessionLocal()
     try:
         yield db

@@ -1,0 +1,89 @@
+{
+  "dashboard": {
+    "title": "Tableau de bord",
+    "total_alerts": "Total alertes",
+    "total_assets": "Actifs découverts",
+    "total_audit": "Entrées d'audit",
+    "total_exports": "Exports générés",
+    "recent_alerts": "Alertes récentes"
+  },
+  "assets": {
+    "title": "Inventaire des actifs",
+    "id": "ID",
+    "ip_address": "Adresse IP",
+    "hostname": "Hostname",
+    "status": "Statut",
+    "first_seen": "Première vue",
+    "last_seen": "Dernière vue",
+    "actions": "Actions",
+    "scan": "Lancer un scan"
+  },
+  "alerts": {
+    "title": "Alertes",
+    "id": "ID",
+    "title_label": "Titre",
+    "severity": "Sévérité",
+    "status": "Statut",
+    "source_ip": "Source IP",
+    "description": "Description",
+    "actions": "Actions",
+    "all_statuses": "Tous les statuts",
+    "new": "Nouvelle",
+    "in_progress": "En cours",
+    "closed": "Clôturée"
+  },
+  "compliance": {
+    "title": "Conformité NIS2",
+    "global_score": "Score global",
+    "compliant": "Conformes",
+    "partial": "Partiels",
+    "non_compliant": "Non conformes",
+    "total": "Total",
+    "requirements": "Exigences NIS2",
+    "evidence": "Preuve",
+    "recommendation": "Recommandation"
+  },
+  "traffic": {
+    "title": "Trafic réseau capturé",
+    "all_protocols": "Tous les protocoles",
+    "source": "Source",
+    "destination": "Destination",
+    "protocol": "Protocole",
+    "port_source": "Port source",
+    "port_dest": "Port dest.",
+    "summary": "Résumé",
+    "date": "Date"
+  },
+  "exports": {
+    "title": "Exports (Preuves NIS2)",
+    "format": "Format",
+    "data": "Données",
+    "generate": "Générer l'export",
+    "alerts": "Alertes",
+    "assets": "Actifs",
+    "audit_logs": "Journaux d'audit"
+  },
+  "audit": {
+    "title": "Journaux d'audit",
+    "id": "ID",
+    "action": "Action",
+    "target": "Cible",
+    "result": "Résultat",
+    "user": "Utilisateur",
+    "date": "Date"
+  },
+  "auth": {
+    "login": "Se connecter",
+    "logout": "Déconnexion",
+    "username": "Identifiant",
+    "password": "Mot de passe",
+    "invalid_credentials": "Identifiants invalides"
+  },
+  "common": {
+    "none": "Aucun",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "system": "Système"
+  }
+}

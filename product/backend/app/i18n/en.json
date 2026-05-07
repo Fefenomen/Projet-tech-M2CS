@@ -1,0 +1,89 @@
+{
+  "dashboard": {
+    "title": "Dashboard",
+    "total_alerts": "Total alerts",
+    "total_assets": "Discovered assets",
+    "total_audit": "Audit entries",
+    "total_exports": "Generated exports",
+    "recent_alerts": "Recent alerts"
+  },
+  "assets": {
+    "title": "Asset Inventory",
+    "id": "ID",
+    "ip_address": "IP Address",
+    "hostname": "Hostname",
+    "status": "Status",
+    "first_seen": "First seen",
+    "last_seen": "Last seen",
+    "actions": "Actions",
+    "scan": "Run scan"
+  },
+  "alerts": {
+    "title": "Alerts",
+    "id": "ID",
+    "title_label": "Title",
+    "severity": "Severity",
+    "status": "Status",
+    "source_ip": "Source IP",
+    "description": "Description",
+    "actions": "Actions",
+    "all_statuses": "All statuses",
+    "new": "New",
+    "in_progress": "In progress",
+    "closed": "Closed"
+  },
+  "compliance": {
+    "title": "NIS2 Compliance",
+    "global_score": "Global score",
+    "compliant": "Compliant",
+    "partial": "Partial",
+    "non_compliant": "Non-compliant",
+    "total": "Total",
+    "requirements": "NIS2 Requirements",
+    "evidence": "Evidence",
+    "recommendation": "Recommendation"
+  },
+  "traffic": {
+    "title": "Captured Network Traffic",
+    "all_protocols": "All protocols",
+    "source": "Source",
+    "destination": "Destination",
+    "protocol": "Protocol",
+    "port_source": "Source port",
+    "port_dest": "Dest port",
+    "summary": "Summary",
+    "date": "Date"
+  },
+  "exports": {
+    "title": "Exports (NIS2 Proofs)",
+    "format": "Format",
+    "data": "Data",
+    "generate": "Generate export",
+    "alerts": "Alerts",
+    "assets": "Assets",
+    "audit_logs": "Audit logs"
+  },
+  "audit": {
+    "title": "Audit Logs",
+    "id": "ID",
+    "action": "Action",
+    "target": "Target",
+    "result": "Result",
+    "user": "User",
+    "date": "Date"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "username": "Username",
+    "password": "Password",
+    "invalid_credentials": "Invalid credentials"
+  },
+  "common": {
+    "none": "None",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "system": "System"
+  }
+}

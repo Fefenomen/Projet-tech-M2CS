@@ -16,6 +16,40 @@ OpenCode permet de configurer des agents spécialisés, avec des rôles, des per
 
 ---
 
+# Suivi des tâches du MVP
+
+Le suivi vivant du MVP BigBrowser se fait dans le **GitHub Project** associe au depot :
+
+- Project : `BigBrowser MVP Tracking`
+- URL : `https://github.com/users/Fefenomen/projects/2`
+
+Ce board est la **source de verite temps reel** pour l'avancement des user stories `US-01.x`.
+
+## Statuts du board
+
+- `Backlog` : tache capturee mais pas encore planifiee pour execution
+- `À faire` : tache priorisee et prete a etre prise en charge
+- `En cours` : implementation ou correction active en cours
+- `En revue` : code termine, en attente de tests, revue securite ou validation
+- `Terminé` : increment valide et pret pour la suite
+
+## Regle de pilotage
+
+- le **Project GitHub** porte l'etat courant des taches ;
+- `documents/07_gestion_de_projet/EPIC-01_plan.md` reste la reference fonctionnelle ;
+- `documents/07_gestion_de_projet/RAPPORT_SPRINT1.md` reste un point de situation periodique ;
+- les agents doivent faire progresser les taches de gauche a droite au fur et a mesure du travail reel.
+
+## Workflow attendu par increment
+
+```text
+À faire -> En cours -> En revue -> Terminé
+```
+
+Si une tache future est identifiee sans etre immediatement prise en charge, elle reste en `Backlog`.
+
+---
+
 # 1. Résultat attendu à la fin
 
 À la fin du guide, l’étudiant aura :

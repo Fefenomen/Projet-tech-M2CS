@@ -1,0 +1,25 @@
+FROM python:3.13-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    nginx \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /agent
+
+COPY agent/requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY agent/ ./
+
+RUN chmod +x entrypoint.sh
+
+ENV SOC_URL=http://soc:8000
+ENV AGENT_SECRET=endpoint_secret_key
+
+EXPOSE 80
+
+HEALTHCHECK --interval=10s --timeout=3s --retries=5 \
+  CMD curl -f http://localhost/ || exit 1
+
+ENTRYPOINT ["./entrypoint.sh"]
