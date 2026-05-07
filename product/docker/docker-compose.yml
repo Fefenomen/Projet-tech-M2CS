@@ -11,7 +11,7 @@ services:
     volumes:
       - soc-data:/data
     environment:
-      DATABASE_URL: sqlite:///data/bigbrowser.db
+      DATABASE_URL: sqlite:////data/bigbrowser.db
       HOST: 0.0.0.0
       PORT: 8000
     networks:

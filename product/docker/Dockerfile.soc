@@ -22,7 +22,7 @@ RUN mkdir -p /data
 
 EXPOSE 8000
 
-ENV DATABASE_URL=sqlite:///data/bigbrowser.db
+ENV DATABASE_URL=sqlite:////data/bigbrowser.db
 ENV HOST=0.0.0.0
 ENV PORT=8000
 
