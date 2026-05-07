@@ -23,9 +23,11 @@ L'EPIC-01 couvre le développement du MVP BigBrowser, outil de cybersurveillance
 |-----------|--------|--------------|
 | Backend FastAPI | ✅ Skeleton créé | `product/backend/app/` |
 | `GET /health` | ✅ Implémenté + testé | `app/health/router.py` |
-| Auth router | 🔄 Skeleton (sans DB) | `app/auth/router.py` |
-| Telemetry heartbeat | 🔄 Skeleton (sans DB) | `app/telemetry/router.py` |
-| Base de données | ❌ À créer (SQLite MVP) | - |
+| Auth router | ✅ JWT + DB + rôles | `app/auth/router.py` |
+| Telemetry heartbeat | ✅ Implémenté (DB ready) | `app/telemetry/router.py` |
+| Base de données | ✅ SQLite MVP | `app/core/database.py` |
+| Modèles de données | ✅ 6 modèles + relations | `app/models/` |
+| Seed users | ✅ admin + analyst | `app/core/database.py` |
 | Scan réseau | ❌ À implémenter | - |
 | Assets/Inventory | ❌ À implémenter | - |
 | Alertes | ❌ À implémenter | - |
@@ -101,35 +103,35 @@ L'EPIC-01 couvre le développement du MVP BigBrowser, outil de cybersurveillance
 
 ---
 
-### US-01.5 — Authentification JWT Complète
+### US-01.5 — Authentification JWT Complète ✅ DONE
 
 | Élément | Détail |
 |---------|--------|
 | **ID** | US-01.5 |
 | **Objectif** | Finaliser l'auth avec stockage users en DB, hash bcrypt, rôles `admin`/`analyst` |
 | **Epic** | EPIC-01 — Authentification & RBAC |
-| **Fichiers** | `app/auth/service.py`, `app/auth/schemas.py`, `app/models/user.py` |
+| **Fichiers** | `app/auth/service.py`, `app/auth/schemas.py`, `app/auth/router.py` |
 | **Agent** | @backend-python-dev |
 | **Critères d'acceptation** | Login retourne JWT, rôle vérifié, accès refusé si mauvais rôle |
 | **Tests attendus** | `test_login_valid()`, `test_login_invalid_password()`, `test_protected_route_with_valid_token()`, `test_role_access_denied()` |
 | **Risques** | R-S01 : Injection via champs de login (mitigation : validation Pydantic) |
-| **Statut** | 📋 À faire |
+| **Statut** | ✅ TERMINÉ |
 
 ---
 
-### US-01.6 — Initialisation Admin et Utilisateurs
+### US-01.6 — Initialisation Admin et Utilisateurs ✅ DONE
 
 | Élément | Détail |
 |---------|--------|
 | **ID** | US-01.6 |
 | **Objectif** | Script d'initialisation créant le compte `admin` par défaut et permettant la création d'utilisateurs |
 | **Epic** | EPIC-01 — Authentification & RBAC |
-| **Fichiers** | `app/auth/service.py` (création user), `scripts/init_db.py` |
+| **Fichiers** | `app/core/database.py` (_seed_default_users), `app/auth/router.py` (POST /users) |
 | **Agent** | @backend-python-dev |
-| **Critères d'acceptation** | Compte `admin`/`admin123` créé au premier démarrage, route `POST /auth/users` (admin only) |
-| **Tests attendus** | `test_create_user_admin()`, `test_create_user_denied_for_analyst()` |
+| **Critères d'acceptation** | Compte `admin`/`admin123` créé au premier démarrage, route `POST /api/v1/auth/users` (admin only) |
+| **Tests attendus** | `test_create_user_as_admin()`, `test_create_user_as_analyst_forbidden()` |
 | **Risques** | R-S05 : Secret exposé (mitigation : `.env` dans `.gitignore`) |
-| **Statut** | 📋 À faire |
+| **Statut** | ✅ TERMINÉ |
 
 ---
 
@@ -306,8 +308,12 @@ L'EPIC-01 couvre le développement du MVP BigBrowser, outil de cybersurveillance
 
 1. ✅ **US-01.1** — `GET /health` — **TERMINÉ**
 2. ✅ **US-01.2** — Backend skeleton — **TERMINÉ**
-3. 📋 **US-01.3** — Configuration DB SQLite — **À DÉLÉGUER**
-4. 📋 **US-01.4** — Modèles de données — **À DÉLÉGUER**
+3. ✅ **US-01.3** — Configuration DB SQLite — **TERMINÉ**
+4. ✅ **US-01.4** — Modèles de données — **TERMINÉ**
+5. ✅ **US-01.5** — Auth JWT complète (DB) — **TERMINÉ**
+6. ✅ **US-01.6** — Init admin + POST /users — **TERMINÉ**
+7. 📋 **US-01.7** — Scan réseau — **À FAIRE (Sprint 3)**
+8. 📋 **US-01.8** — Inventaire actifs + ports — **À FAIRE (Sprint 3)**
 
 ---
 
