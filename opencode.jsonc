@@ -32,7 +32,7 @@
       "python -m pytest*": "allow",
       "pytest*": "allow",
       "ruff*": "allow",
-      "git push*": "deny",
+      "git push*": "allow",
       "rm -rf*": "deny"
     },
 
