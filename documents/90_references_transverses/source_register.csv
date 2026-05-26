@@ -1,0 +1,78 @@
+id,theme,metric_or_fact,value,year,source_url,confidence,notes
+S01,Marche cyber global,Taille marche cyber mondial,250 milliards USD,2025,https://www.gartner.com/en/newsroom/press-releases,Gartner,Source Gartner reprise dans etude de marche
+S02,Marche cyber France,Taille marche cyber France,6.4 milliards EUR,2025,https://www.pac-online.com/,PAC,PAC cabinet
+S03,Marche cyber France,Croissance annuelle marche cyber France,+10%,2025,https://www.pac-online.com/,PAC,PAC cabinet
+S04,Marche SIEM France,Taille marche SIEM/SOC France,441 millions EUR,2025,https://www.mordorintelligence.com/,Mordor Intelligence,Mordor Intelligence
+S05,Marche SIEM France,Croissance annuelle SIEM/SOC France,+16%,2025,https://www.mordorintelligence.com/,Mordor Intelligence,Mordor Intelligence
+S06,Marche monitoring reseau,Taille marche monitoring reseau mondial,4.1 milliards USD,2025,https://www.fortunebusinessinsights.com/,Fortune Business Insights,CAGR 9.5%
+S07,NIS2 France,Entites concernees par NIS2 France,15000,2027,https://cyber.gouv.fr/actualites/nis2,high,ANSSI - directive 2022/2555
+S08,NIS2 Europe,Directive NIS2,2022/2555,2024,https://digital-strategy.ec.europa.eu/en/policies/nis2-directive,high,Commission Europeenne - effective Oct 2024
+S09,Menace France,Score intensite menace,1114.8,2026,https://cyber.gouv.fr/panorama-cybermenace-2025,high,ANSSI Panorama Cybermenace
+S10,Menace France,Evenements de menace traites,4386,2024,https://cyber.gouv.fr/panorama-cybermenace-2024,high,ANSSI
+S11,Ransomware France,Cas ransomware documentes,317,2026,https://cyber.gouv.fr/actualites,high,ANSSI
+S12,PME cyber,Cyberattaques ciblant les PME France,75%,2025,https://www.cybermalveillance.gouv.fr/rapport-activite-2025,high,Cybermalveillance.gouv.fr
+S13,PME cyber,PME investissant moins de 1000€/an en cyber,60%,2025,https://www.cybermalveillance.gouv.fr/barometre-2025,high,Cybermalveillance.gouv.fr
+S14,PME cyber,PME fermeture dans les 6 mois apres attaque grave,60%,2025,https://www.jedha.co/,Jedha,Etude Jedha
+S15,PME cyber,PME exprimant besoin d'outils accessibles,57%,2025,https://www.diginamic.fr/,Diginamic,Etude Diginamic
+S16,Vulnerabilite critique,CVE score 10.0,CVE-2026-42369,2026,https://nvd.nist.gov/,high,NIST NVD
+S17,Education cyber,Nombre de formations cybersecurite France,900+,2025,https://www.opiiec.fr/,OPIIEC,OPIIEC
+S18,France 2030,Enveloppe France 2030 Cyber PME,100 millions EUR,2026,https://www.france2030.gouv.fr/,high,France 2030
+S19,Benchmark Wazuh,Prix Wazuh 100 agents,571 USD/mois,2026,https://wazuh.com/cloud/,medium,Pricing catalogue
+S20,Benchmark Wazuh,Prix Wazuh 250 agents,923 USD/mois,2026,https://wazuh.com/cloud/,medium,Pricing catalogue
+S21,Benchmark Wazuh,Prix Wazuh 500 agents,1467 USD/mois,2026,https://wazuh.com/cloud/,medium,Pricing catalogue
+S22,Benchmark Datadog,Prix Cloud SIEM Datadog,5 USD/million events/mois,2026,https://www.datadoghq.com/pricing/?product=cloud-siem,medium,Annuel
+S23,Benchmark Datadog,Prix Workload Protection Datadog,15 USD/host/mois,2026,https://www.datadoghq.com/pricing/?product=workload-protection,medium,Annuel
+S24,Benchmark Splunk,Prix Splunk Cloud,150 USD/GB/mois,2026,https://www.splunk.com/en_us/products/pricing.html,medium,Pricing public
+S25,Benchmark Microsoft,Prix Microsoft Sentinel,Pay-as-you-go,2026,https://azure.microsoft.com/en-us/pricing/details/microsoft-sentinel/,medium,Pricing Azure
+S26,Benchmark Elastic,Prix Elastic Cloud,Variable,2026,https://www.elastic.co/pricing/,medium,Pricing public
+S27,Benchmark Security Onion,Documentation Security Onion,Gratuit open-source,2026,https://docs.securityonion.net/,high,Documentation officielle
+S28,Benchmark Suricata,Documentation Suricata,Gratuit open-source,2026,https://suricata.io/documentation/,high,Documentation officielle
+S29,Benchmark Zeek,Documentation Zeek,Gratuit open-source,2026,https://docs.zeek.org/,high,Documentation officielle
+S30,Cyber resilience,DORA directive,Digital Operational Resilience Act,2025,https://digital-strategy.ec.europa.eu/en/policies/dora,high,Commission Europeenne
+S31,Cyber resilience,Cyber Resilience Act,EU regulation,2025,https://digital-strategy.ec.europa.eu/en/policies/cyber-resilience-act,high,Commission Europeenne
+S32,Securite applicative,OWASP ASVS,Application Security Verification Standard,2024,https://owasp.org/www-project-application-security-verification-standard/,high,OWASP
+S33,Securite nationale,NIST CSF 2.0,Cybersecurity Framework,2024,https://www.nist.gov/cyberframework,high,NIST
+S34,Gouvernance cyber,Cadre OECD securite digitale,Risk-management oriented,2026,https://www.oecd.org/digital/digital-security/,high,OECD
+S35,Menace Belgique,Emails suspects traites,9929354,2025,https://ccb.belgium.be/en,high,CCB Belgium key figures
+S36,Menace Belgique,Notifications cyberattaques Belgique,556,2025,https://ccb.belgium.be/en,high,CCB Belgium
+S37,Menace Belgique,Notifications NIS2 Belgique,635,2025,https://ccb.belgium.be/en,high,CCB Belgium
+S38,Menace Belgique,Cas ransomware Belgique,105,2025,https://ccb.belgium.be/fr/news/plus-dattaques-plus-de-signalements,high,CCB Belgium article
+S39,Menace Suisse,Signalements cyber NCSC Suisse,35727,2025,https://www.ncsc.admin.ch/ncsc/fr/home/dokumentation/berichte/lageberichte/halbjahresbericht-2025-1.html,high,NCSC semi-annual 2025/1
+S40,Menace Suisse,Part fraude cyber Suisse,58%,2025,https://www.ncsc.admin.ch/ncsc/fr/home/dokumentation/berichte/lageberichte/halbjahresbericht-2025-1.html,high,NCSC
+S41,ENISA investissement,Budget cyber median organisations UE,1.5M EUR,2025,https://www.enisa.europa.eu/publications/nis-investments-2025,high,ENISA NIS Investments
+S42,ENISA investissement,Part budget IT allouee cyber,9%,2025,https://www.enisa.europa.eu/publications/nis-investments-2025,high,ENISA
+S43,ENISA investissement,Difficulte recrutement talent cyber,76%,2025,https://www.enisa.europa.eu/publications/nis-investments-2025,high,ENISA
+S44,ENISA maturite,Secteurs les plus matures cyber,electricite telecoms banque,2024,https://www.enisa.europa.eu/news/enisa-nis360-2024-report,high,ENISA NIS360
+S45,Response IR,M-Trends 2025 Mandiant,Vecteur initial exploit 33%,2024,https://cloud.google.com/blog/topics/threat-intelligence/m-trends-2025,medium,Mandiant
+S46,Response IR,Dwell time median global,11 jours,2024,https://cloud.google.com/blog/topics/threat-intelligence/m-trends-2025,medium,Mandiant
+S47,Cout incidents,Cout moyen breach IBM,4.4M USD,2025,https://www.ibm.com/reports/data-breach,medium,IBM/Ponemon
+S48,Strategie cyber,Priorite investissement cyber lie geopolitique,60%,2026,https://www.pwc.com/gx/en/issues/cybersecurity/global-digital-trust-insights.html,medium,PwC Global Digital Trust Insights
+S49,Strategie cyber,Organisations confiantes sur toutes vulnerabilites,6%,2026,https://www.pwc.com/gx/en/issues/cybersecurity/global-digital-trust-insights.html,medium,PwC
+S50,Impact boursier,Impact attaque cyber sur cours bourse,-19.5%,2025,https://www.csb.school/,CSB School,CSB School etude
+S51,PME France,Nombre cyberattaques contre PME France,330000+,2023,https://www.diginamic.fr/,Diginamic,Chiffre 2023 cite dans etude de marche
+S52,NIS1,Nombre entites NIS1 France,850,2024,https://cyber.gouv.fr/,high,ANSSI - ancien regime
+S53,WEF resilience,Supply chain top risque cyber,54%,2025,https://www.weforum.org/publications/global-cybersecurity-outlook-2025/digest/,medium,World Economic Forum
+S54,Verizon DBIR,Ciblage PME vs grandes organisations,~4x,2025,https://www.verizon.com/business/resources/reports/dbir/,medium,Data Breach Investigations Report
+S55,Stats entreprises UE,Nombre PME dans l'UE,26.1 millions,2025,https://single-market-economy.ec.europa.eu/smes/sme-strategy-and-sme-friendly-business-conditions/sme-performance-review_en,high,Commission Europeenne
+S56,Stats entreprises BE,Statbel entreprises Belgique,Source officielle,2026,https://statbel.fgov.be/en/themes/enterprises,high,Statbel
+S57,Marche monitoring,Future Market Report monitoring reseau,Projections CAGR,2026,https://www.futuremarketinsights.com/,medium,Future Market Insights
+S58,Marche monitoring,Precedence Research monitoring,Projections marche,2026,https://www.precedenceresearch.com/,medium,Precedence Research
+S59,Xerfi marche France,Donnees marche cyber France,Analyse sectorielle,2025,https://www.xerfi.com/,medium,Xerfi
+S60,Numeum,Donnees numerique France,Analyse sectorielle,2025,https://numeum.fr/,medium,Numeum
+S61,CERT-FR CTI,Tendances tactiques 2025,Erosion frontiere etatique-cybercrime,2025,https://www.cert.ssi.gouv.fr/cti/CERTFR-2026-CTI-002/,high,CERT-FR
+S62,Belgique incidents,Incidents signales Belgique variation,+70%,2025,https://ccb.belgium.be/fr/news/plus-dattaques-plus-de-signalements-la-realite-cyber-de-la-belgique-en-2025,high,CCB article
+S63,Suisse NCSC,Signalements obligatoires Suisse,145,2025,https://www.ncsc.admin.ch/ncsc/fr/home/dokumentation/berichte/lageberichte/halbjahresbericht-2025-2.html,high,NCSC semi-annual 2025/2
+S64,Inflation INSEE,Taux d'inflation France,2%,2026,https://www.insee.fr/,high,INSEE
+S65,Licence,GPLv2,GNU General Public License v2,1991,https://www.gnu.org/licenses/old-licenses/gpl-2.0.html,high,Licence candidate pour BigBrowser
+S66,Licence,Apache 2.0,Apache License Version 2.0,2004,https://www.apache.org/licenses/LICENSE-2.0,high,Licence candidate pour BigBrowser
+S67,Stack technique,Python,Version 3.11+,2024,https://www.python.org/,high,Documentation officielle
+S68,Stack technique,FastAPI,Version 0.110+,2024,https://fastapi.tiangolo.com/,high,Documentation officielle
+S69,Stack technique,SQLAlchemy,Version 2.x,2024,https://www.sqlalchemy.org/,high,Documentation officielle
+S70,Stack technique,Pydantic,Version 2.x,2024,https://docs.pydantic.dev/,high,Documentation officielle
+S71,Stack technique,Bootstrap,Version 5.x,2024,https://getbootstrap.com/,high,Documentation officielle
+S72,Stack technique,PostgreSQL,Version 15+,2024,https://www.postgresql.org/,high,Documentation officielle
+S73,Stack technique,Redis,Version 7+,2024,https://redis.io/,high,Documentation officielle
+S74,Stack technique,Celery,Version 5.x,2024,https://docs.celeryq.dev/,high,Documentation officielle
+S75,Stack technique,Docker,Compose V2,2024,https://docs.docker.com/compose/,high,Documentation officielle
+S76,Stack technique,Nmap,Version 7.94+,2024,https://nmap.org/,high,Documentation officielle
+S77,Stack technique,Scapy,Analyse paquets Python,2024,https://scapy.net/,high,Documentation officielle

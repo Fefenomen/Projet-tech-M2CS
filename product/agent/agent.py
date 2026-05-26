@@ -90,6 +90,38 @@ def send_events(token: str, events: list[dict]) -> bool:
     return False
 
 
+def send_traffic(token: str, captures: list[dict]) -> bool:
+    """Send captured traffic data to the SOC."""
+    if not captures:
+        return True
+    sent = 0
+    try:
+        for capture in captures:
+            resp = requests.post(
+                f"{SOC_URL}/api/v1/traffic/",
+                json={
+                    "hostname": ENDPOINT_NAME,
+                    "source_ip": capture["source_ip"],
+                    "target_ip": capture["target_ip"],
+                    "protocol": capture["protocol"],
+                    "source_port": capture["source_port"],
+                    "target_port": capture["target_port"],
+                    "payload_summary": capture["payload_summary"],
+                    "timestamp": capture["timestamp"],
+                },
+                headers={"Authorization": f"Bearer {token}"},
+                timeout=5,
+            )
+            if resp.status_code in (200, 201):
+                sent += 1
+        if sent > 0:
+            logger.info("Sent %d/%d traffic captures", sent, len(captures))
+        return sent > 0
+    except Exception as e:
+        logger.error("Traffic error: %s", e)
+    return False
+
+
 def collect_local_events() -> list[dict]:
     """Collect local events (simulated for demo: connections, logs)."""
     events = []
@@ -122,6 +154,31 @@ def collect_local_events() -> list[dict]:
     return events
 
 
+def collect_local_traffic() -> list[dict]:
+    """Collect traffic captures from nginx access logs."""
+    captures = []
+    try:
+        with open("/var/log/nginx/access.log") as f:
+            for line in f.readlines()[-20:]:
+                parts = line.split()
+                if len(parts) >= 7:
+                    src_ip = parts[0]
+                    method_path = f"{parts[5]} {parts[6]}"
+                    status = parts[8] if len(parts) > 8 else "0"
+                    captures.append({
+                        "source_ip": src_ip,
+                        "target_ip": get_ip(),
+                        "protocol": "http",
+                        "source_port": 0,
+                        "target_port": 80,
+                        "payload_summary": f"{method_path} → {status}",
+                        "timestamp": datetime.now(timezone.utc).isoformat(),
+                    })
+    except FileNotFoundError:
+        pass
+    return captures
+
+
 def main():
     logger.info("BigBrowser Agent starting on %s", ENDPOINT_NAME)
     logger.info("SOC URL: %s", SOC_URL)
@@ -145,6 +202,10 @@ def main():
             events = collect_local_events()
             if events:
                 send_events(token, events)
+
+            captures = collect_local_traffic()
+            if captures:
+                send_traffic(token, captures)
 
         except Exception as e:
             logger.error("Unexpected error: %s", e)
