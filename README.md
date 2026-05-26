@@ -90,45 +90,88 @@ Reports : génération de rapports.
 
 ## Flux métier simplifié
 
-1. L’attaquant Docker génère des comportements suspects contrôlés :
-   - scans réseau ;
-   - flood HTTP ;
-   - tentatives de connexion échouées ;
-   - trafic multi-ports.
+### 1. Collecte de télémétrie
 
-2. Les endpoints supervisés exécutent l’agent BigBrowser.
+Les endpoints supervisés envoient des événements de sécurité :
 
-3. L’agent collecte :
-   - les heartbeats ;
-   - les événements réseau ;
-   - certains comportements détectés localement.
+- connexions réseau ;
+- exécution de processus ;
+- logs système ;
+- erreurs ;
+- activités suspectes.
 
-4. Les données sont envoyées au Backend FastAPI via API sécurisée JWT.
+Le module **Telemetry** réceptionne et normalise les données.
 
-5. Le backend :
-   - persiste les événements ;
-   - met à jour l’inventaire des actifs ;
-   - applique les règles de détection ;
-   - génère des alertes ;
-   - journalise les actions critiques.
+---
 
-6. Le dashboard SOC affiche :
-   - les métriques ;
-   - les alertes ;
-   - les actifs réseau ;
-   - les journaux d’audit.
+### 2. Centralisation des données
 
-7. L’administrateur ou l’analyste SOC peut :
-   - investiguer les alertes ;
-   - changer leur statut ;
-   - consulter les événements ;
-   - exporter des rapports CSV/JSON.
+Les événements sont stockés dans une base centrale :
 
-8. Les exports permettent de produire des preuves exploitables pour :
-   - les audits ;
-   - la traçabilité ;
-   - la conformité NIS2.
+- historique des événements ;
+- inventaire des machines ;
+- données d’audit ;
+- traces analystes.
 
+Cela permet la traçabilité et les analyses SOC.
+
+---
+
+### 3. Détection et corrélation
+
+Le moteur de détection applique :
+
+- règles simples ;
+- corrélation multi-événements ;
+- scoring de criticité ;
+- logique NIS2.
+
+Exemple :
+
+- plusieurs échecs de connexion ;
+- activité répétée ;
+- communication vers IP suspecte.
+
+```text
+=> génération d’une alerte
+```
+
+---
+
+### 4. Gestion des alertes
+
+Le module Alerts permet :
+
+- priorisation ;
+- qualification ;
+- assignation ;
+- suivi du traitement ;
+- clôture.
+
+Les analystes SOC peuvent investiguer depuis l’interface web.
+
+---
+
+### 5. Interface SOC
+
+Le dashboard web fournit :
+
+- vue temps réel ;
+- indicateurs KPI ;
+- reporting ;
+- conformité ;
+- exports CSV / JSON.
+
+---
+
+### 6. Sécurité et gouvernance
+
+Les modules transverses assurent :
+
+- Auth : authentification ;
+- RBAC : contrôle des accès ;
+- Audit Trail : traçabilité ;
+- Reports : génération de rapports.
 ## Présentation du projet
 
 - **Auth** : authentification et contrôle d'accès.
