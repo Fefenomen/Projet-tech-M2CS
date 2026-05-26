@@ -33,7 +33,7 @@ services:
     hostname: endpoint1
     environment:
       SOC_URL: http://soc:8000
-      AGENT_SECRET: endpoint_secret_key_1
+      AGENT_SECRET: agent_secret_mvp
       ENDPOINT_NAME: endpoint1
     depends_on:
       soc:
@@ -51,7 +51,7 @@ services:
     hostname: endpoint2
     environment:
       SOC_URL: http://soc:8000
-      AGENT_SECRET: endpoint_secret_key_2
+      AGENT_SECRET: agent_secret_mvp
       ENDPOINT_NAME: endpoint2
     depends_on:
       soc:

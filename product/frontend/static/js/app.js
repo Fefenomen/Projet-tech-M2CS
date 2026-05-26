@@ -197,7 +197,8 @@ async function loadDashboard() {
 
 async function loadAssets() {
     try {
-        const assets = await apiCall("/assets/");
+        const response = await apiCall("/assets/");
+        const assets = response.assets || [];
         const tbody = document.getElementById("assets-body");
         tbody.innerHTML = assets.map(a => `
             <tr>
@@ -251,7 +252,8 @@ async function loadAlerts() {
         let url = "/alerts/";
         if (filter) url += `?status=${filter}`;
 
-        const alerts = await apiCall(url);
+        const response = await apiCall(url);
+        const alerts = response.alerts || [];
         const tbody = document.getElementById("alerts-body");
         tbody.innerHTML = alerts.map(a => `
             <tr>
@@ -337,26 +339,52 @@ async function handleExport(e) {
 
 async function handleScan(e) {
     e.preventDefault();
-    const ip = document.getElementById("scan-ip-start").value;
+    const input = document.getElementById("scan-ip-start").value.trim();
     const errorEl = document.getElementById("scan-error");
     const successEl = document.getElementById("scan-success");
 
     errorEl.classList.add("d-none");
     successEl.classList.add("d-none");
 
+    let startIp, endIp;
+
+    if (input.includes("/")) {
+        const [base, mask] = input.split("/");
+        const bits = parseInt(mask, 10);
+        if (isNaN(bits) || bits < 8 || bits > 32) {
+            errorEl.textContent = "Masque CIDR invalide (utilise /8 à /32)";
+            errorEl.classList.remove("d-none");
+            return;
+        }
+        const parts = base.split(".").map(Number);
+        const ipNum = (parts[0] << 24) | (parts[1] << 16) | (parts[2] << 8) | parts[3];
+        const hostMask = 0xFFFFFFFF >>> bits;
+        startIp = parts.join(".");
+        const endNum = (ipNum | hostMask) & 0xFFFFFFFF;
+        endIp = [(endNum >>> 24) & 0xFF, (endNum >>> 16) & 0xFF, (endNum >>> 8) & 0xFF, endNum & 0xFF].join(".");
+    } else if (input.includes("-")) {
+        const [s, e] = input.split("-").map(x => x.trim());
+        startIp = s;
+        endIp = e;
+    } else {
+        startIp = input;
+        endIp = input;
+    }
+
     try {
         const result = await apiCall("/scan/", {
             method: "POST",
-            body: { ip_range: ip },
+            body: { start_ip: startIp, end_ip: endIp, ports: [22, 80, 443, 8080, 3306] },
         });
-        successEl.textContent = `Scan lanc&eacute;: ${result.message}`;
+        successEl.textContent = `Scan termin\u00e9 : ${result.assets_found} actif(s), ${result.ports_scanned} port(s) scann\u00e9s en ${result.duration_seconds}s`;
         successEl.classList.remove("d-none");
-        loadAssets();
+        setTimeout(() => loadAssets(), 1000);
         loadDashboard();
     } catch (err) {
         errorEl.textContent = err.message;
         errorEl.classList.remove("d-none");
     }
+}
 }
 
 async function loadAuditLogs() {
