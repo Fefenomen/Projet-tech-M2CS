@@ -19,7 +19,44 @@ TO DO
 
 ## Flux métier simplifié
 
-TO DO
+1. L’attaquant Docker génère des comportements suspects contrôlés :
+   - scans réseau ;
+   - flood HTTP ;
+   - tentatives de connexion échouées ;
+   - trafic multi-ports.
+
+2. Les endpoints supervisés exécutent l’agent BigBrowser.
+
+3. L’agent collecte :
+   - les heartbeats ;
+   - les événements réseau ;
+   - certains comportements détectés localement.
+
+4. Les données sont envoyées au Backend FastAPI via API sécurisée JWT.
+
+5. Le backend :
+   - persiste les événements ;
+   - met à jour l’inventaire des actifs ;
+   - applique les règles de détection ;
+   - génère des alertes ;
+   - journalise les actions critiques.
+
+6. Le dashboard SOC affiche :
+   - les métriques ;
+   - les alertes ;
+   - les actifs réseau ;
+   - les journaux d’audit.
+
+7. L’administrateur ou l’analyste SOC peut :
+   - investiguer les alertes ;
+   - changer leur statut ;
+   - consulter les événements ;
+   - exporter des rapports CSV/JSON.
+
+8. Les exports permettent de produire des preuves exploitables pour :
+   - les audits ;
+   - la traçabilité ;
+   - la conformité NIS2.
 
 ## Présentation du projet
 
