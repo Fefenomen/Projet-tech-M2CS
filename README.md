@@ -15,7 +15,7 @@ Le projet est structuré pour répondre à une exigence de validation profession
 
 ## Schéma global de fonctionnement
 
-![Capture d'écran de mon projet](08_architecture/assets/Schema_global_de_fonctionnement.png)
+![Schéma global de mon projet](documents/08_architecture/assets/Schema_global_de_fonctionnement.png)
 
 Explication fonctionnelle simplifiée
 1. Collecte de télémétrie
