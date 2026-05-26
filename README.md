@@ -15,7 +15,150 @@ Le projet est structuré pour répondre à une exigence de validation profession
 
 ## Schéma global de fonctionnement
 
-TO DO
+                           +----------------------+
+                           |   Endpoint Supervisé |
+                           |  (Windows / Linux)   |
+                           +----------+-----------+
+                                      |
+                                      | Télémétrie :
+                                      | logs, processus,
+                                      | connexions, événements
+                                      v
++----------------------------------------------------------------+
+|                     Module Telemetry / Ingestion               |
+|----------------------------------------------------------------|
+| - Réception des événements                                     |
+| - Parsing / Normalisation                                      |
+| - Enrichissement des données                                   |
+| - Mise en file / buffering                                     |
++----------------------------+-----------------------------------+
+                             |
+                             v
++----------------------------------------------------------------+
+|                     Base de données centrale                    |
+|----------------------------------------------------------------|
+| - Stockage des événements                                      |
+| - Historique de sécurité                                        |
+| - Inventaire des actifs                                         |
+| - Données d’audit                                               |
++----------------------------+-----------------------------------+
+                             |
+         +-------------------+-------------------+
+         |                                       |
+         v                                       v
++--------------------------+      +------------------------------+
+| Module Assets            |      | Engine de Détection          |
+|--------------------------|      |------------------------------|
+| - Inventaire machines    |      | - Règles SOC                |
+| - Identification IP      |      | - Corrélation d’événements  |
+| - OS / hostname          |      | - Détection comportementale |
+| - Historique activité    |      | - Scoring de risque         |
++-------------+------------+      +---------------+--------------+
+              |                                   |
+              |                                   v
+              |                    +------------------------------+
+              |                    | Module Alerts                |
+              |                    |------------------------------|
+              |                    | - Création d’alertes         |
+              |                    | - Priorisation               |
+              |                    | - Workflow analyste          |
+              |                    | - Statuts / assignation      |
+              |                    +---------------+--------------+
+              |                                    |
+              +-------------------+----------------+
+                                  |
+                                  v
++----------------------------------------------------------------+
+|                     Interface Web Analyste                     |
+|----------------------------------------------------------------|
+| - Dashboard SOC                                                |
+| - Visualisation des événements                                 |
+| - Consultation des actifs                                      |
+| - Gestion des alertes                                          |
+| - KPI / conformité NIS2                                        |
+| - Exports CSV / JSON                                           |
++----------------------------+-----------------------------------+
+                             |
+                             v
++----------------------------------------------------------------+
+|                  Sécurité & Gouvernance                        |
+|----------------------------------------------------------------|
+| Auth        : authentification                                 |
+| RBAC        : gestion des rôles                                |
+| Audit Trail : journalisation des actions critiques             |
+| Reports     : reporting et exports                             |
++----------------------------------------------------------------+
+
+Explication fonctionnelle simplifiée
+1. Collecte de télémétrie
+
+Les endpoints supervisés envoient des événements de sécurité :
+
+connexions réseau ;
+exécution de processus ;
+logs système ;
+erreurs ;
+activités suspectes.
+
+Le module Telemetry réceptionne et normalise les données.
+
+2. Centralisation des données
+
+Les événements sont stockés dans une base centrale :
+
+historique des événements ;
+inventaire des machines ;
+données d’audit ;
+traces analystes.
+
+Cela permet la traçabilité et les analyses SOC.
+
+3. Détection et corrélation
+
+Le moteur de détection applique :
+
+règles simples ;
+corrélation multi-événements ;
+scoring de criticité ;
+logique NIS2.
+
+Exemple :
+
+plusieurs échecs de connexion ;
+activité répétée ;
+communication vers IP suspecte.
+
+=> génération d’une alerte.
+
+4. Gestion des alertes
+
+Le module Alerts permet :
+
+priorisation ;
+qualification ;
+assignation ;
+suivi du traitement ;
+clôture.
+
+Les analystes SOC peuvent investiguer depuis l’interface web.
+
+5. Interface SOC
+
+Le dashboard web fournit :
+
+vue temps réel ;
+indicateurs KPI ;
+reporting ;
+conformité ;
+exports CSV / JSON.
+6. Sécurité et gouvernance
+
+Les modules transverses assurent :
+
+Auth : authentification ;
+RBAC : contrôle des accès ;
+Audit Trail : traçabilité ;
+Reports : génération de rapports.
 
 ## Flux métier simplifié
 
