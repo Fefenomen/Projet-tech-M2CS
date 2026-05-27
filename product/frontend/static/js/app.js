@@ -2,6 +2,7 @@ const API_BASE = "/api/v1";
 let currentToken = localStorage.getItem("bb_token");
 let currentUser = null;
 let currentAlertId = null;
+let refreshTimer = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     if (currentToken) {
@@ -101,7 +102,20 @@ async function handleLogin(e) {
     }
 }
 
+function stopPolling() {
+    if (refreshTimer) {
+        clearInterval(refreshTimer);
+        refreshTimer = null;
+    }
+}
+
+function startPolling(fn, ms) {
+    stopPolling();
+    refreshTimer = setInterval(fn, ms);
+}
+
 function handleLogout() {
+    stopPolling();
     currentToken = null;
     currentUser = null;
     localStorage.removeItem("bb_token");
@@ -128,12 +142,23 @@ function navigateTo(page) {
 
     document.querySelector(`[data-page="${page}"]`)?.classList.add("active");
 
+    stopPolling();
+
     switch (page) {
-        case "dashboard": loadDashboard(); break;
+        case "dashboard":
+            loadDashboard();
+            startPolling(loadDashboard, 5000);
+            break;
         case "compliance": loadCompliance(); break;
         case "assets": loadAssets(); break;
-        case "alerts": loadAlerts(); break;
-        case "traffic": loadTraffic(); break;
+        case "alerts":
+            loadAlerts();
+            startPolling(loadAlerts, 3000);
+            break;
+        case "traffic":
+            loadTraffic();
+            startPolling(loadTraffic, 5000);
+            break;
         case "exports": break;
         case "audit": loadAuditLogs(); break;
     }
@@ -227,7 +252,10 @@ async function viewAsset(id) {
             `<span class="badge bg-secondary me-1">${p.port}/${p.protocol} ${p.service_name || ""}</span>`
         ).join("") || "Aucun port d&eacute;tect&eacute;";
 
-        const modal = new bootstrap.Modal(document.getElementById("scan-modal"));
+        const modalEl = document.getElementById("scan-modal");
+        const savedBodyHtml = modalEl.querySelector(".modal-body").innerHTML;
+        const savedTitle = modalEl.querySelector(".modal-title").textContent;
+
         document.querySelector("#scan-modal .modal-title").textContent = `Actif ${asset.ip_address}`;
         document.querySelector("#scan-modal .modal-body").innerHTML = `
             <p><strong>Hostname:</strong> ${asset.hostname || "-"}</p>
@@ -236,10 +264,12 @@ async function viewAsset(id) {
             <p><strong>Derni&egrave;re vue:</strong> ${formatDate(asset.last_seen_at)}</p>
             <p><strong>Ports:</strong><br>${portsHtml}</p>
         `;
-        document.querySelector("#scan-form").style.display = "none";
+
+        const modal = new bootstrap.Modal(modalEl);
         modal.show();
-        modal._element.addEventListener("hidden.bs.modal", () => {
-            document.querySelector("#scan-form").style.display = "";
+        modalEl.addEventListener("hidden.bs.modal", () => {
+            document.querySelector("#scan-modal .modal-title").textContent = savedTitle;
+            document.querySelector("#scan-modal .modal-body").innerHTML = savedBodyHtml;
         }, { once: true });
     } catch (err) {
         console.error("Asset detail failed:", err);
@@ -342,9 +372,13 @@ async function handleScan(e) {
     const input = document.getElementById("scan-ip-start").value.trim();
     const errorEl = document.getElementById("scan-error");
     const successEl = document.getElementById("scan-success");
+    const loadingEl = document.getElementById("scan-loading");
+    const submitBtn = document.getElementById("scan-submit-btn");
 
     errorEl.classList.add("d-none");
     successEl.classList.add("d-none");
+    loadingEl.classList.remove("d-none");
+    submitBtn.disabled = true;
 
     let startIp, endIp;
 
@@ -354,6 +388,8 @@ async function handleScan(e) {
         if (isNaN(bits) || bits < 8 || bits > 32) {
             errorEl.textContent = "Masque CIDR invalide (utilise /8 à /32)";
             errorEl.classList.remove("d-none");
+            loadingEl.classList.add("d-none");
+            submitBtn.disabled = false;
             return;
         }
         const parts = base.split(".").map(Number);
@@ -383,8 +419,10 @@ async function handleScan(e) {
     } catch (err) {
         errorEl.textContent = err.message;
         errorEl.classList.remove("d-none");
+    } finally {
+        loadingEl.classList.add("d-none");
+        submitBtn.disabled = false;
     }
-}
 }
 
 async function loadAuditLogs() {

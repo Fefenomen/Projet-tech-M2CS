@@ -76,7 +76,7 @@ Projet-tech-M2CS/
 │   │   └── prepare-docker.md
 │   │
 │   └── skills/
-│       ├── devinciwatch-project/
+│       ├── bigbrowser-project/
 │       │   └── SKILL.md
 │       ├── fastapi-backend/
 │       │   └── SKILL.md
@@ -253,7 +253,7 @@ OpenCode permet de connecter un provider, puis de sélectionner le modèle avec 
 ```bash
 mkdir -p .opencode/agents
 mkdir -p .opencode/commands
-mkdir -p .opencode/skills/devinciwatch-project
+mkdir -p .opencode/skills/bigbrowser-project
 mkdir -p .opencode/skills/fastapi-backend
 mkdir -p .opencode/skills/python-testing
 mkdir -p .opencode/skills/devops-docker
@@ -274,7 +274,7 @@ Résultat attendu :
 .opencode/commands
 .opencode/skills
 .opencode/skills/cyber-security-review
-.opencode/skills/devinciwatch-project
+.opencode/skills/bigbrowser-project
 .opencode/skills/devops-docker
 .opencode/skills/fastapi-backend
 .opencode/skills/python-testing
@@ -792,14 +792,14 @@ Les skills sont des instructions réutilisables. OpenCode les charge depuis des 
 Créer le fichier :
 
 ```bash
-touch .opencode/skills/devinciwatch-project/SKILL.md
+touch .opencode/skills/bigbrowser-project/SKILL.md
 ```
 
 Mettre ce contenu :
 
 ```md
 ---
-name: devinciwatch-project
+name: bigbrowser-project
 description: Comprendre BigBrowser, son MVP, ses epics, son architecture SOC et ses contraintes de lab.
 compatibility: opencode
 ---
@@ -1248,7 +1248,7 @@ Résultat attendu :
 .opencode/commands/security-review.md
 .opencode/commands/test-feature.md
 .opencode/skills/cyber-security-review/SKILL.md
-.opencode/skills/devinciwatch-project/SKILL.md
+.opencode/skills/bigbrowser-project/SKILL.md
 .opencode/skills/devops-docker/SKILL.md
 .opencode/skills/fastapi-backend/SKILL.md
 .opencode/skills/python-testing/SKILL.md
@@ -1445,7 +1445,7 @@ Résultat attendu :
 ```json
 {
   "status": "ok",
-  "service": "devinciwatch-api"
+  "service": "bigbrowser-api"
 }
 ```
 

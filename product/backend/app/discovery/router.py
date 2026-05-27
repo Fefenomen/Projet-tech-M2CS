@@ -1,4 +1,5 @@
 import time
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -59,7 +60,7 @@ async def launch_scan(
         ip = asset_data["ip"]
         existing = db.query(Asset).filter(Asset.ip_address == ip).first()
         if existing:
-            existing.last_seen_at = existing.__class__.first_seen_at.type.python_type().__class__.now()
+            existing.last_seen_at = datetime.now(timezone.utc)
             existing.status = "active"
         else:
             asset = Asset(ip_address=ip, hostname=f"host-{ip.replace('.', '-')}", status="active")

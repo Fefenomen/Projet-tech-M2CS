@@ -20,27 +20,66 @@ product/
 - **Déploiement** : Docker Compose (3 zones : SOC, Endpoints, Attaquant)
 - **Auth** : JWT avec rôles admin/analyst
 
-## Lancement rapide
+---
 
-### Option 1 : Backend local
+## 📋 Aide-mémoire : toutes les commandes
+
+### Backend (dev local)
 
 ```bash
-cd product/backend
-python -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev]"
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+# Démarrer le serveur
+cd product/backend && uvicorn app.main:app --host 0.0.0.0 --port 8080
+
+# Serveur avec reload (auto-redémarrage au changement de code)
+cd product/backend && uvicorn app.main:app --reload --host 0.0.0.0 --port 8080
+
+# URL : http://localhost:8080 (admin / admin123)
 ```
 
-→ http://127.0.0.1:8000 (admin / admin123)
+### Reset BDD + attaques (depuis `product/attacker/`)
 
-### Option 2 : Lab Docker complet
+```bash
+cd product/attacker
+
+# Reset + attaques fraîches (recommandé)
+./reset_demo.sh --all --attacks
+
+# Reset + seed conformité NIS2
+./reset_demo.sh --all --seed-compliance
+
+# Reset + attaques + conformité (tout en un)
+./reset_demo.sh --all --attacks --seed-compliance
+
+# Reset sans redémarrer le serveur (garde events in-memory)
+./reset_demo.sh --no-restart
+
+# Re-jouer les attaques uniquement (sans reset)
+./attack_demo.py
+```
+
+### Lab Docker (depuis `product/docker/`)
 
 ```bash
 cd product/docker
-./demo.sh demo
-```
 
-→ Lance SOC + 2 Endpoints + Attaquant automatiquement
+# Démarrer le lab complet (SOC + 2 Endpoints + Attaquant)
+./demo.sh up
+
+# Démo complète (up + seed + attaques automatiques)
+./demo.sh demo
+
+# Voir l'état des conteneurs
+./demo.sh status
+
+# Voir les logs en continu
+./demo.sh logs
+
+# Arrêter le lab
+./demo.sh down
+
+# Reset complet (down + rebuild + up)
+./demo.sh reset
+```
 
 ## Comptes par défaut
 

@@ -29,7 +29,7 @@ class ScanRequest(BaseModel):
     start_ip: str
     end_ip: str
     ports: list[int] = [22, 80, 443, 3306, 5432, 8080]
-    delay: float = 0.1
+    delay: float = 0.0
 
     @field_validator("start_ip", "end_ip")
     @classmethod

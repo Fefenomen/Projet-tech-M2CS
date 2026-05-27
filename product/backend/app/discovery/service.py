@@ -1,5 +1,5 @@
 import socket
-import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any
 
 from app.discovery.schemas import ip_range_to_list, PortScanResult
@@ -11,8 +11,10 @@ WELL_KNOWN_SERVICES = {
     8080: "http-proxy", 8443: "https-alt",
 }
 
+_MAX_WORKERS = 100
 
-def scan_port(ip: str, port: int, timeout: float = 0.5) -> PortScanResult:
+
+def scan_port(ip: str, port: int, timeout: float = 0.3) -> PortScanResult:
     """Scan a single port on a target IP using TCP connect."""
     result = PortScanResult(ip=ip, port=port)
     try:
@@ -27,20 +29,24 @@ def scan_port(ip: str, port: int, timeout: float = 0.5) -> PortScanResult:
     return result
 
 
-def scan_ip_range(start_ip: str, end_ip: str, ports: list[int], delay: float = 0.1) -> list[dict[str, Any]]:
-    """Scan an IP range for open ports. Returns list of asset findings."""
+def scan_ip_range(start_ip: str, end_ip: str, ports: list[int], delay: float = 0) -> list[dict[str, Any]]:
+    """Scan an IP range for open ports (parallel). Returns list of asset findings."""
     ip_list = ip_range_to_list(start_ip, end_ip)
     assets: dict[str, dict[str, Any]] = {}
 
-    for ip in ip_list:
-        for port in ports:
-            result = scan_port(ip, port)
+    with ThreadPoolExecutor(max_workers=_MAX_WORKERS) as pool:
+        futures = {
+            pool.submit(scan_port, ip, port): (ip, port)
+            for ip in ip_list
+            for port in ports
+        }
+        for future in as_completed(futures):
+            result = future.result()
             if result.state == "open":
-                if ip not in assets:
-                    assets[ip] = {"ip": ip, "ports": [], "services": []}
-                assets[ip]["ports"].append(result.port)
+                if result.ip not in assets:
+                    assets[result.ip] = {"ip": result.ip, "ports": [], "services": []}
+                assets[result.ip]["ports"].append(result.port)
                 if result.service_name:
-                    assets[ip]["services"].append(result.service_name)
-            time.sleep(delay)
+                    assets[result.ip]["services"].append(result.service_name)
 
     return list(assets.values())

@@ -28,7 +28,7 @@ def _check_network_supervision(db: Session) -> tuple[str, str, str]:
 
 def _check_alert_management(db: Session) -> tuple[str, str, str]:
     alert_count = db.query(func.count(Alert.id)).scalar() or 0
-    closed_count = db.query(func.count(Alert.id)).filter(Alert.status == "closed").scalar() or 0
+    closed_count = db.query(func.count(Alert.id)).filter(Alert.status == "cloturee").scalar() or 0
     if alert_count >= 1 and closed_count >= 1:
         return "conforme", f"{alert_count} alertes ({closed_count} clôturées)", ""
     elif alert_count >= 1:
