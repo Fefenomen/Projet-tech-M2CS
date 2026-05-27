@@ -44,7 +44,7 @@ cd product/attacker
 # Reset + attaques fraîches (recommandé)
 ./reset_demo.sh --all --attacks
 
-# Reset + seed conformité NIS2
+# Reset + seed conformité NIS2 (assets, alertes, exports, trafic)
 ./reset_demo.sh --all --seed-compliance
 
 # Reset + attaques + conformité (tout en un)
@@ -108,8 +108,17 @@ cd product/docker
 | `GET` | `/api/v1/dashboard/` | Métriques | Authentifié |
 | `POST` | `/api/v1/exports/` | Export CSV/JSON | Authentifié |
 | `GET` | `/api/v1/exports/{id}/download` | Télécharger export | Authentifié |
+| `POST` | `/api/v1/traffic/` | Envoyer capture trafic | Authentifié |
+| `GET` | `/api/v1/traffic/` | Liste captures trafic | Authentifié |
 | `GET` | `/api/v1/audit-logs/` | Journaux d'audit | Admin |
 | `GET` | `/api/v1/audit-logs/{id}` | Détail journal | Admin |
+
+## Auto-rafraîchissement
+
+Les pages SOC se rafraîchissent automatiquement via polling :
+- **Dashboard** : toutes les 5 secondes
+- **Alertes**   : toutes les 3 secondes
+- **Traffic**   : toutes les 5 secondes
 
 ## Tests
 
