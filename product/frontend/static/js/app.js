@@ -360,8 +360,25 @@ async function handleExport(e) {
         document.getElementById("export-result").classList.remove("d-none");
         document.getElementById("export-message").textContent =
             `Export ${format.toUpperCase()} (${result.row_count} lignes) g&eacute;n&eacute;r&eacute; avec succ&egrave;s.`;
-        document.getElementById("export-download-link").href = `/api/v1/exports/${result.id}/download`;
-        document.getElementById("export-download-link").setAttribute("download", "");
+        const linkEl = document.getElementById("export-download-link");
+        linkEl.onclick = async (ev) => {
+            ev.preventDefault();
+            const resp = await fetch(API_BASE + `/exports/${result.id}/download`, {
+                headers: { Authorization: `Bearer ${currentToken}` },
+            });
+            if (!resp.ok) {
+                alert("Erreur t&eacute;l&eacute;chargement: " + resp.statusText);
+                return;
+            }
+            const blob = await resp.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `export_${result.scope}.${format}`;
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+        linkEl.href = "#";
     } catch (err) {
         alert("Erreur: " + err.message);
     }
