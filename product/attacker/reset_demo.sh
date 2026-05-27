@@ -168,6 +168,23 @@ seed_compliance() {
             ]
         }' > /dev/null
     info "  15 events télémetry envoyés"
+
+    # Traffic captures (pour la page Trafic)
+    for cap in \
+      '{"hostname":"seed","source_ip":"10.0.0.1","target_ip":"192.168.1.1","source_port":40000,"target_port":80,"protocol":"http","payload_summary":"GET /"}' \
+      '{"hostname":"seed","source_ip":"10.0.0.2","target_ip":"192.168.1.1","source_port":40001,"target_port":443,"protocol":"tcp","payload_summary":"TCP handshake"}' \
+      '{"hostname":"seed","source_ip":"10.0.0.3","target_ip":"8.8.8.8","source_port":40002,"target_port":53,"protocol":"dns","payload_summary":"DNS query google.com"}' \
+      '{"hostname":"seed","source_ip":"192.168.1.50","target_ip":"10.0.0.1","source_port":50000,"target_port":22,"protocol":"tcp","payload_summary":"SSH brute force attempt"}' \
+      '{"hostname":"seed","source_ip":"172.16.0.10","target_ip":"192.168.1.1","source_port":50001,"target_port":8080,"protocol":"http","payload_summary":"POST /login — 401 Unauthorized"}' \
+      '{"hostname":"seed","source_ip":"10.0.0.55","target_ip":"192.168.1.1","source_port":50002,"target_port":8443,"protocol":"tcp","payload_summary":"Suspicious outbound connection"}' \
+      '{"hostname":"seed","source_ip":"10.0.0.2","target_ip":"192.168.1.1","source_port":40003,"target_port":80,"protocol":"http","payload_summary":"POST /api/v1/data"}' \
+      '{"hostname":"seed","source_ip":"10.0.0.4","target_ip":"8.8.4.4","source_port":40004,"target_port":53,"protocol":"dns","payload_summary":"DNS query exfiltration-domain-xyz.com"}'; do
+        curl -sf -X POST "$SOC_URL/api/v1/traffic/" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $TOKEN" \
+            -d "$cap" > /dev/null
+    done
+    info "  8 captures trafic"
     sleep 1
 
     # Clôturer la première alerte
